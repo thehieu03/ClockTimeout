@@ -11,17 +11,21 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres123
       POSTGRES_DB: catalog_db
+      PGDATA: /var/lib/postgresql/data
     ports:
-      - "5432:5432"
+      - "5433:5432"
     volumes:
       - ./docker-volumes/postgres:/var/lib/postgresql/data
     networks:
       - progcoder_network
+    # Sử dụng entrypoint gốc của PostgreSQL
+    # Permission errors sẽ được ignore tự động trên Windows/WSL
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres"]
       interval: 10s
       timeout: 5s
       retries: 5
+      start_period: 30s
 
   mongodb:
     image: mongo:7.0
@@ -41,10 +45,11 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+      start_period: 40s
 
   mysql:
     image: mysql:8.0
-    container_name: mysql-db
+    container_name: mysql
     restart: unless-stopped
     environment:
       MYSQL_ROOT_PASSWORD: root123
@@ -57,19 +62,11 @@ services:
       - progcoder_network
     healthcheck:
       test:
-        [
-          "CMD",
-          "mysqladmin",
-          "ping",
-          "-h",
-          "localhost",
-          "-u",
-          "root",
-          "-proot123",
-        ]
+        ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-proot123"]
       interval: 10s
       timeout: 5s
       retries: 5
+      start_period: 30s
 
   sql-server:
     image: mcr.microsoft.com/mssql/server:2022-latest
@@ -89,9 +86,48 @@ services:
       test:
         [
           "CMD-SHELL",
-          "/opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P 'SqlServer123!' -Q 'SELECT 1' || exit 1",
+          "/opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P SqlServer123! -Q 'SELECT 1' || exit 1",
         ]
       interval: 10s
       timeout: 5s
       retries: 5
+      start_period: 60s
+
+  redis:
+    image: redis:7.0-alpine
+    container_name: redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    command: redis-server --save 20 1 --loglevel warning --requirepass redis123
+    volumes:
+      - ./docker-volumes/redis:/data
+    networks:
+      - progcoder_network
+    healthcheck:
+      test: ["CMD", "redis-cli", "-a", "redis123", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
       start_period: 30s
+
+  rabbitmq:
+    image: rabbitmq:3.11-management-alpine
+    container_name: rabbitmq
+    restart: unless-stopped
+    environment:
+      RABBITMQ_DEFAULT_USER: admin
+      RABBITMQ_DEFAULT_PASS: admin123
+    ports:
+      - "5673:5672"
+      - "15673:15672"
+    volumes:
+      - ./docker-volumes/rabbitmq:/var/lib/rabbitmq
+    networks:
+      - progcoder_network
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "status"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 60s
