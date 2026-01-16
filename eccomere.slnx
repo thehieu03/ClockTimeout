@@ -1,0 +1,15 @@
+<Solution>
+  <!-- Solution Folders -->
+  <Folder Name="/src/" />
+  <Folder Name="/src/Apps/" />
+  <Folder Name="/src/Apps/ApiGateway/" />
+  <Folder Name="/src/Apps/JobOrchestrator/" />
+  <Folder Name="/src/Services/" />
+  <Folder Name="/src/Shared/">
+    <Project Path="src/Shared/BuildingBlocks/BuildingBlocks.csproj" />
+    <Project Path="src/Shared/Common/Common.csproj" />
+  </Folder>
+  
+  <!-- Solution Items -->
+  <Folder Name="/Solution Items/" />
+</Solution>

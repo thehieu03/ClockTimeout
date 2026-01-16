@@ -1,0 +1,15 @@
+version: "3.9"
+
+networks:
+  microservices_network:
+    driver: bridge
+
+services:
+  # Add your microservices here
+  # Example:
+  # api-gateway:
+  #   image: your-registry/api-gateway:latest
+  #   ports:
+  #     - "5000:80"
+  #   networks:
+  #     - microservices_network

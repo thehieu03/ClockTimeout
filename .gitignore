@@ -5,6 +5,7 @@ docker-volumes/
 .env
 .env.local
 .env.*.local
+*.env
 
 # .NET Build Artifacts
 bin/
@@ -61,6 +62,7 @@ Desktop.ini
 
 # Logs
 *.log
+*.log.*
 
 # NuGet Packages
 *.nupkg
@@ -69,16 +71,34 @@ Desktop.ini
 !**/packages/build/
 *.nuget.props
 *.nuget.targets
+project.lock.json
+project.fragment.lock.json
 
 # MSTest test Results
 [Tt]est[Rr]esult*/
 [Bb]uild[Ll]og.*
 
 # .NET Core
-project.lock.json
-project.fragment.lock.json
 artifacts/
+*.DotSettings
+*.DotSettings.user
 
 # Solution files (keep only main solution)
 *.slnx
-!microservices/eccomere.slnx
+!eccomere.slnx
+
+# JetBrains Rider
+.idea/
+*.sln.iml
+
+# Visual Studio Code
+.vscode/
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+
+# Temporary files
+*.tmp
+*.temp
+*~
