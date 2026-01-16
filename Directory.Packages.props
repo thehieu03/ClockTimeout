@@ -5,4 +5,7 @@
   <ItemGroup>
     <!-- Add common package versions here -->
   </ItemGroup>
+  <ItemGroup>
+    <PackageVersion Include="MediatR" Version="14.0.0" />
+  </ItemGroup>
 </Project>
