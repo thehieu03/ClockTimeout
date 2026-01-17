@@ -12,4 +12,5 @@ public sealed class MinIoCfg
     public const string AccessKey = "AccessKey";
     public const string SecretKey = "SecretKey";
     public const string Secure = "Secure";
+    public const string BucketName = "BucketName";
 }

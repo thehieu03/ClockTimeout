@@ -1,11 +1,9 @@
 namespace Catalog.Application.Models.Filters;
 
-public class GetPublishProductsFilter
-{
-    public string? SearchText { get; set; }
-    public Guid? BrandId { get; set; }
-    public List<Guid>? CategoryIds { get; set; }
-    public decimal? MinPrice { get; set; }
-    public decimal? MaxPrice { get; set; }
-    public bool? Published { get; set; }
-}
+public record class GetPublishProductsFilter(
+    string? SearchText,
+    Guid? BrandId = null,
+    Guid[]? CategoryIds = null,
+    decimal? MinPrice = null,
+    decimal? MaxPrice = null,
+    bool? Featured = null);

@@ -1,10 +1,11 @@
 namespace Catalog.Application.Models.Filters;
 
-public class GetProductsFilter
-{
-    public string? SearchText { get; set; }
-    public Guid? BrandId { get; set; }
-    public List<Guid>? CategoryIds { get; set; }
-    public bool? Published { get; set; }
-    public bool? Featured { get; set; }
-}
+public record class GetProductsFilter(
+    string? SearchText,
+    Guid[]? Ids,
+    Guid? BrandId = null,
+    Guid[]? CategoryIds = null,
+    decimal? MinPrice = null,
+    decimal? MaxPrice = null,
+    bool? Published = null,
+    bool? Featured = null);
