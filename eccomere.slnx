@@ -5,6 +5,15 @@
   <Folder Name="/src/Apps/ApiGateway/" />
   <Folder Name="/src/Apps/JobOrchestrator/" />
   <Folder Name="/src/Services/" />
+  <Folder Name="/src/Services/Catalog/" />
+  <Folder Name="/src/Services/Catalog/Api/">
+    <Project Path="src/Services/Catalog/Api/Catalog.Api/Catalog.Api.csproj" />
+  </Folder>
+  <Folder Name="/src/Services/Catalog/Core/">
+    <Project Path="src/Services/Catalog/Core/Catalog.Application/Catalog.Application.csproj" Id="0de6a9b3-f26c-4aae-95c1-0bca8e62ba7d" />
+    <Project Path="src/Services/Catalog/Core/Catalog.Domain/Catalog.Domain.csproj" />
+    <Project Path="src/Services/Catalog/Core/Catalog.Infrastructure/Catalog.Infrastructure.csproj" Id="b8936d17-6bd9-497d-ac6c-9e905018bb10" />
+  </Folder>
   <Folder Name="/src/Shared/">
     <Project Path="src/Shared/BuildingBlocks/BuildingBlocks.csproj" />
     <Project Path="src/Shared/Common/Common.csproj" />
