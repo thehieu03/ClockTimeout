@@ -1,5 +1,19 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
+  <ItemGroup>
+    <ProjectReference Include="..\Catalog.Application\Catalog.Application.csproj" />
+    <ProjectReference Include="..\..\..\..\Shared\Common\Common.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Marten" />
+    <PackageReference Include="Minio" />
+    <PackageReference Include="Polly" />
+    <PackageReference Include="Polly.Extensions.Http" />
+    <PackageReference Include="Refit.HttpClientFactory" />
+    <PackageReference Include="Scrutor" />
+  </ItemGroup>
+
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
