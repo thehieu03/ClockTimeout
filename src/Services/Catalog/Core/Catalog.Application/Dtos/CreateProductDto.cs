@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using Common.Models;
 
 namespace Catalog.Application.Dtos;
 
@@ -27,6 +28,8 @@ public class CreateProductDto
     public decimal? SalePrice { get; set; }
 
     public List<Guid>? CategoryIds { get; set; }
+    public List<UploadFileBytes>? UploadImages { get; set; }
+    public UploadFileBytes? UploadThumbnail { get; set; }
     public Guid? BrandId { get; set; }
     public List<string>? Colors { get; set; }
     public List<string>? Sizes { get; set; }
