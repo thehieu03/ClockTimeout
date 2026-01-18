@@ -118,26 +118,11 @@ public class CatalogDbContext : DbContext
                 .HasColumnName("Tags")
                 .HasColumnType("jsonb")
                 .IsRequired(false);
-            // Navigation properties
-            entity.OwnsMany(e => e.Images, img =>
-            {
-                img.ToTable("ProductImages");
-                img.WithOwner().HasForeignKey("ProductId");
-                img.Property(i => i.FileId).HasMaxLength(200);
-                img.Property(i => i.OriginalFileName).HasMaxLength(500);
-                img.Property(i => i.FileName).HasMaxLength(500);
-                img.Property(i => i.PublicURL).HasMaxLength(1000);
-            });
-
-            entity.OwnsOne(e => e.Thumbnail, thumb =>
-            {
-                thumb.ToTable("ProductThumbnails");
-                thumb.WithOwner().HasForeignKey("ProductId");
-                thumb.Property(t => t.FileId).HasMaxLength(200);
-                thumb.Property(t => t.OriginalFileName).HasMaxLength(500);
-                thumb.Property(t => t.FileName).HasMaxLength(500);
-                thumb.Property(t => t.PublicURL).HasMaxLength(1000);
-            });
+            // Navigation properties - Ignored because ProductImageEntity is configured as standalone entity
+            // ProductImageEntity is managed separately via DbSet<ProductImageEntity> ProductImages
+            // If you need relationships, add ProductId foreign key to ProductImageEntity and configure relationships
+            entity.Ignore(e => e.Images);
+            entity.Ignore(e => e.Thumbnail);
 
             // Indexes
             entity.HasIndex(e => e.Sku)
