@@ -16,7 +16,6 @@
   </Folder>
   <Folder Name="/src/Services/Catalog/Test/">
     <Project Path="src/Services/Catalog/Test/TestProject1/TestProject1.csproj" />
-    <Project Path="src/Services/Catalog/Test/TestProject2/TestProject2.csproj" />
   </Folder>
   <Folder Name="/src/Shared/">
     <Project Path="src/Shared/BuildingBlocks/BuildingBlocks.csproj" />
