@@ -1,4 +1,6 @@
-﻿namespace Catalog.Api;
+﻿using BuildingBlocks.DistributedTracing;
+
+namespace Catalog.Api;
 
 public static class DependencyInjection
 {
@@ -7,7 +9,8 @@ public static class DependencyInjection
 
     public static IServiceCollection AddApiServices(this IServiceCollection services,IConfiguration cfg)
     {
-        // services.AddExceptionHandler<Customer>()
+        services.AddDistributedTracing(cfg);
+        // services.AddSerilogLogging(cfg);
         return services;
     }
     

@@ -12,12 +12,18 @@ public class CatalogDbContext : DbContext
 
     public DbSet<ProductEntity> Products { get; set; } = null!;
     public DbSet<ProductImageEntity> ProductImages { get; set; } = null!;
+    public DbSet<BrandEntity> Brands { get; set; } = null!;
+    public DbSet<CategoryEntity> Categories { get; set; } = null!;
+    public DbSet<OutboxMessageEntity> OutboxMessages { get; set; } = null!;
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
         ConfigureProductEntity(modelBuilder);
         ConfigureProductImageEntity(modelBuilder);
+        ConfigureBrandEntity(modelBuilder);
+        ConfigureCategoryEntity(modelBuilder);
+        ConfigureOutboxMessageEntity(modelBuilder);
     }
 
     private void ConfigureProductEntity(ModelBuilder modelBuilder)
@@ -50,6 +56,10 @@ public class CatalogDbContext : DbContext
             entity.Property(e => e.Slug)
                 .HasColumnName("Slug")
                 .HasMaxLength(200)
+                .IsRequired(false);
+            entity.Property(e => e.Barcode)
+                .HasColumnName("Barcode")
+                .HasMaxLength(100)
                 .IsRequired(false);
             entity.Property(e => e.Price)
                 .HasColumnName("Price")
@@ -175,6 +185,171 @@ public class CatalogDbContext : DbContext
             entity.HasIndex(e => e.FileId)
                 .IsUnique()
                 .HasDatabaseName("IX_ProductImages_FileId");
+        });
+    }
+
+    private void ConfigureBrandEntity(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<BrandEntity>(entity =>
+        {
+            entity.ToTable("Brands");
+            // primary key
+            entity.HasKey(b => b.Id);
+            // properties configuration
+            entity.Property(e => e.Id)
+                .HasColumnName("Id")
+                .IsRequired();
+            entity.Property(e => e.Name)
+                .HasColumnName("Name")
+                .HasMaxLength(200)
+                .IsRequired(false);
+            entity.Property(e => e.Slug)
+                .HasColumnName("Slug")
+                .HasMaxLength(200)
+                .IsRequired(false);
+            entity.Property(e => e.CreatedOnUtc)
+                .HasColumnName("CreatedOnUtc")
+                .IsRequired();
+            entity.Property(e => e.CreatedBy)
+                .HasColumnName("CreatedBy")
+                .HasMaxLength(200)
+                .IsRequired(false);
+            entity.Property(e => e.LastModifiedOnUtc)
+                .HasColumnName("LastModifiedOnUtc")
+                .IsRequired(false);
+            entity.Property(e => e.LastModifiedBy)
+                .HasColumnName("LastModifiedBy")
+                .HasMaxLength(200)
+                .IsRequired(false);
+            // Indexes
+            entity.HasIndex(e => e.Slug)
+                .IsUnique()
+                .HasDatabaseName("IX_Brands_Slug");
+            entity.HasIndex(e => e.Name)
+                .HasDatabaseName("IX_Brands_Name");
+        });
+    }
+
+    private void ConfigureCategoryEntity(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<CategoryEntity>(entity =>
+        {
+            entity.ToTable("Categories");
+            // primary key
+            entity.HasKey(c => c.Id);
+            // properties configuration
+            entity.Property(e => e.Id)
+                .HasColumnName("Id")
+                .IsRequired();
+            entity.Property(e => e.Name)
+                .HasColumnName("Name")
+                .HasMaxLength(200)
+                .IsRequired(false);
+            entity.Property(e => e.Description)
+                .HasColumnName("Description")
+                .HasMaxLength(1000)
+                .IsRequired(false);
+            entity.Property(e => e.Slug)
+                .HasColumnName("Slug")
+                .HasMaxLength(200)
+                .IsRequired(false);
+            entity.Property(e => e.ParentId)
+                .HasColumnName("ParentId")
+                .IsRequired(false);
+            entity.Property(e => e.CreatedOnUtc)
+                .HasColumnName("CreatedOnUtc")
+                .IsRequired();
+            entity.Property(e => e.CreatedBy)
+                .HasColumnName("CreatedBy")
+                .HasMaxLength(200)
+                .IsRequired(false);
+            entity.Property(e => e.LastModifiedOnUtc)
+                .HasColumnName("LastModifiedOnUtc")
+                .IsRequired(false);
+            entity.Property(e => e.LastModifiedBy)
+                .HasColumnName("LastModifiedBy")
+                .HasMaxLength(200)
+                .IsRequired(false);
+            // Self-referencing relationship (no navigation property, using HasForeignKey directly)
+            entity.HasOne<CategoryEntity>()
+                .WithMany()
+                .HasForeignKey(c => c.ParentId)
+                .OnDelete(DeleteBehavior.Restrict);
+            // Indexes
+            entity.HasIndex(e => e.Slug)
+                .IsUnique()
+                .HasDatabaseName("IX_Categories_Slug");
+            entity.HasIndex(e => e.Name)
+                .HasDatabaseName("IX_Categories_Name");
+            entity.HasIndex(e => e.ParentId)
+                .HasDatabaseName("IX_Categories_ParentId");
+        });
+    }
+
+    private void ConfigureOutboxMessageEntity(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<OutboxMessageEntity>(entity =>
+        {
+            entity.ToTable("OutboxMessages");
+            // primary key
+            entity.HasKey(o => o.Id);
+            // properties configuration
+            entity.Property(e => e.Id)
+                .HasColumnName("Id")
+                .IsRequired();
+            entity.Property(e => e.EventType)
+                .HasColumnName("EventType")
+                .HasMaxLength(200)
+                .IsRequired(false);
+            entity.Property(e => e.Content)
+                .HasColumnName("Content")
+                .HasColumnType("text")
+                .IsRequired(false);
+            entity.Property(e => e.OccurredOnUtc)
+                .HasColumnName("OccurredOnUtc")
+                .IsRequired();
+            entity.Property(e => e.ProcessedOnUtc)
+                .HasColumnName("ProcessedOnUtc")
+                .IsRequired(false);
+            entity.Property(e => e.LastErrorMessage)
+                .HasColumnName("LastErrorMessage")
+                .HasMaxLength(2000)
+                .IsRequired(false);
+            entity.Property(e => e.ClaimedOnUtc)
+                .HasColumnName("ClaimedOnUtc")
+                .IsRequired(false);
+            entity.Property(e => e.AttemptCount)
+                .HasColumnName("AttemptCount")
+                .IsRequired();
+            entity.Property(e => e.MaxAttemptCount)
+                .HasColumnName("MaxAttemptCount")
+                .IsRequired();
+            entity.Property(e => e.NextAttemptOnUtc)
+                .HasColumnName("NextAttemptOnUtc")
+                .IsRequired(false);
+            entity.Property(e => e.CreatedOnUtc)
+                .HasColumnName("CreatedOnUtc")
+                .IsRequired();
+            entity.Property(e => e.CreatedBy)
+                .HasColumnName("CreatedBy")
+                .HasMaxLength(200)
+                .IsRequired(false);
+            entity.Property(e => e.LastModifiedOnUtc)
+                .HasColumnName("LastModifiedOnUtc")
+                .IsRequired(false);
+            entity.Property(e => e.LastModifiedBy)
+                .HasColumnName("LastModifiedBy")
+                .HasMaxLength(200)
+                .IsRequired(false);
+            // Indexes
+            entity.HasIndex(e => e.EventType)
+                .HasDatabaseName("IX_OutboxMessages_EventType");
+            entity.HasIndex(e => e.OccurredOnUtc)
+                .HasDatabaseName("IX_OutboxMessages_OccurredOnUtc");
+            entity.HasIndex(e => e.ProcessedOnUtc)
+                .HasDatabaseName("IX_OutboxMessages_ProcessedOnUtc");
+            entity.HasIndex(e => new { e.ProcessedOnUtc, e.NextAttemptOnUtc })
+                .HasDatabaseName("IX_OutboxMessages_Processed_NextAttempt");
         });
     }
 }

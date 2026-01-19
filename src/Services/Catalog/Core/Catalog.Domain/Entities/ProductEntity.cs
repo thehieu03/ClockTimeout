@@ -1,8 +1,3 @@
-using BuildingBlocks.Abstractions;
-using Catalog.Domain.Enums;
-using Catalog.Domain.Exceptions;
-using Common.Constants;
-
 namespace Catalog.Domain.Entities;
 
 public sealed class ProductEntity : Aggregate<Guid>
