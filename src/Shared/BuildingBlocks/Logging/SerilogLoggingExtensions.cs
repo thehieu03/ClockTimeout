@@ -1,6 +1,7 @@
 using System.Diagnostics;
 using Common.Configurations;
 using Json.Formater;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -67,12 +68,42 @@ public static class SerilogLoggingExtensions
         loggerCfg.Enrich.WithProperty(string.Empty.Format(), string.Empty.BeautyFormat());
         #endregion
         Log.Logger = loggerCfg.CreateLogger();
-        services.AddSerilog(logger:Log.Logger,dispose:true);
+        services.AddSerilog(logger: Log.Logger, dispose: true);
         if (cfg.GetValue($"{section}:EnableSelfLog", false))
         {
-            Serilog.Debugging.SelfLog.Enable(msg=>Console.Error.WriteLine(msg));
+            Serilog.Debugging.SelfLog.Enable(msg => Console.Error.WriteLine(msg));
         }
         return services;
+    }
+    public static WebApplication UseSerilogReqLogging(this WebApplication app)
+    {
+        var section = SerilogCfg.Section;
+        var enable = app.Configuration.GetValue($"{section}:{SerilogCfg.Enable}", false);
+        if (!enable) return app;
+        app.UseSerilogRequestLogging(options =>
+        {
+            options.GetLevel = (httpCtx, elapsed, ex) =>
+            {
+                var path = httpCtx.Request.Path.Value ?? "";
+                if (path.StartsWith("/health", StringComparison.OrdinalIgnoreCase)) return LogEventLevel.Debug;
+                if (path.StartsWith("/metrics", StringComparison.OrdinalIgnoreCase)) return LogEventLevel.Debug;
+                if (path.StartsWith("/swagger", StringComparison.OrdinalIgnoreCase)) return LogEventLevel.Debug;
+                if (ex != null || httpCtx.Response.StatusCode >= 500) return LogEventLevel.Error;
+                return LogEventLevel.Information;
+            };
+            options.EnrichDiagnosticContext = (diag, ctx) =>
+            {
+                diag.Set("RequestHost", ctx.Request.Host.ToString());
+                diag.Set("UserAgent", ctx.Request.Headers.UserAgent.ToString());
+                diag.Set("ClientIP", ctx.Connection.RemoteIpAddress?.ToString());
+            };
+            options.MessageTemplate = "HTTP {RequestMethod} {RequestPath} -> {StatusCode in {Elapsed:0.0000} ms"
+            .BeautyFormat();
+            options.IncludeQueryInRequestPath = false;
+        });
+        app.Lifetime.ApplicationStopped.Register(Log.CloseAndFlush);
+
+        return app;
     }
     private static LogEventLevel ParseLevel(string level)
     {

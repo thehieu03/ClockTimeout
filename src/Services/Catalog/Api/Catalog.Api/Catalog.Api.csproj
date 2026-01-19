@@ -7,7 +7,9 @@
   </Target>
 
   <ItemGroup>
+    <PackageReference Include="AspNetCore.HealthChecks.MySql" />
     <PackageReference Include="AspNetCore.HealthChecks.NpgSql" />
+    <PackageReference Include="AspNetCore.HealthChecks.SqlServer" />
     <PackageReference Include="AspNetCore.HealthChecks.UI.Client" />
     <PackageReference Include="AutoMapper" />
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" />
