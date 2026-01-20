@@ -50,29 +50,30 @@ public sealed class CreateProduct : ICarterModule
             req.ImageFiles = httpContext.HttpContext.Request.Form.Files.ToList();
         }
         var dto = mapper.Map<CreateProductDto>(req);
-        if(req.ImageFiles !=null && req.ImageFiles.Count > 0)
+        if (req.ImageFiles != null && req.ImageFiles.Count > 0)
         {
             dto.UploadImages ??= new();
-            foreach(var file in req.ImageFiles!)
+            foreach (var file in req.ImageFiles!)
             {
                 using var ms = new MemoryStream();
                 await file.CopyToAsync(ms);
                 dto.UploadImages.Add(new UploadFileBytes
                 {
                     FileName = file.FileName,
-                    Bytes=ms.ToArray(),
-                    ContentType=file.ContentType
+                    Bytes = ms.ToArray(),
+                    ContentType = file.ContentType
                 });
             }
         }
-        if(req.ThumbnailFile!=null && req.ThumbnailFile.Length > 0)
+        if (req.ThumbnailFile != null && req.ThumbnailFile.Length > 0)
         {
             using var ms = new MemoryStream();
             await req.ThumbnailFile.CopyToAsync(ms);
-            dto.UploadThumbnail = new UploadFileBytes {
-                FileName=req.ThumbnailFile.FileName,
-                Bytes=ms.ToArray(),
-                ContentType=req.ThumbnailFile.ContentType
+            dto.UploadThumbnail = new UploadFileBytes
+            {
+                FileName = req.ThumbnailFile.FileName,
+                Bytes = ms.ToArray(),
+                ContentType = req.ThumbnailFile.ContentType
             };
         }
         var currentUser = httpContext.GetCurrentUser();

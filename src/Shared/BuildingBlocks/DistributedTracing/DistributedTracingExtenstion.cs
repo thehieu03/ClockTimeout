@@ -93,7 +93,7 @@ public static class DistributedTracingExtenstion
                         o.Protocol = OtlpExportProtocol.Grpc;
                         o.Endpoint = new Uri(otlpEndpoint!);
                     });
-                if (cfg.GetValue($"{DistributedTracingCfg.Section}:{DistributedTracingCfg.Prometheus}", false))
+                if (cfg.GetValue($"{DistributedTracingCfg.Section}:{DistributedTracingCfg.Prometheus}:{DistributedTracingCfg.Enable}", false))
                 {
                     metricsBuilder.AddPrometheusExporter();
                 }
@@ -104,7 +104,7 @@ public static class DistributedTracingExtenstion
     {
         var cfg = app.Configuration;
         var enable = cfg.GetValue($"{DistributedTracingCfg.Section}:{DistributedTracingCfg.Enable}", false);
-        if(!enable) return app;
+        if (!enable) return app;
         var enablePrometheus =
             cfg.GetValue($"{DistributedTracingCfg.Section}:{DistributedTracingCfg.Prometheus}:{DistributedTracingCfg.Enable}", false);
         if (enablePrometheus)

@@ -10,7 +10,7 @@ namespace Catalog.Infrastructure;
 #region Methods
 public static class DependencyInjection
 {
-    public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration cfg)
+    public static IServiceCollection AddInfrastructureServices(this IServiceCollection services, IConfiguration cfg)
     {
         services.AddMarten(options =>
         {
