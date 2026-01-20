@@ -14,8 +14,8 @@ public sealed class GetAllBrands : ICarterModule
             .WithTags(ApiRoutes.Brand.Tags)
             .WithName(nameof(GetAllBrands))
             .Produces(StatusCodes.Status403Forbidden)
-            .ProducesProblem(StatusCodes.Status400BadRequest)
-            .RequireAuthorization();
+            .ProducesProblem(StatusCodes.Status400BadRequest);
+        // .RequireAuthorization();
     }
 
     private async Task<ApiGetResponse<GetAllBrandsResult>> HandleGetAllBrandsAsync(

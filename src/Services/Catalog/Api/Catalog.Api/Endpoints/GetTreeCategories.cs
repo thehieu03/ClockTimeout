@@ -15,7 +15,8 @@ public sealed class GetTreeCategories : ICarterModule
             .WithName(nameof(GetTreeCategories))
             .Produces(StatusCodes.Status403Forbidden)
             .ProducesProblem(StatusCodes.Status400BadRequest)
-            .RequireAuthorization();
+            .AllowAnonymous();
+        // .RequireAuthorization();
     }
 
     private async Task<ApiGetResponse<GetTreeCategoriesResult>> HandleGetTreeCategoriesAsync(

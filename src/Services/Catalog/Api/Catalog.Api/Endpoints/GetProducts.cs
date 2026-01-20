@@ -16,8 +16,8 @@ public sealed class GetProducts : ICarterModule
             .WithTags(ApiRoutes.Product.Tags)
             .WithName(nameof(GetProducts))
             .Produces(StatusCodes.Status403Forbidden)
-            .ProducesProblem(StatusCodes.Status400BadRequest)
-            .RequireAuthorization();
+            .ProducesProblem(StatusCodes.Status400BadRequest);
+        // .RequireAuthorization();
     }
 
     private async Task<ApiGetResponse<GetProductsResult>> HandleGetProductsAsync(

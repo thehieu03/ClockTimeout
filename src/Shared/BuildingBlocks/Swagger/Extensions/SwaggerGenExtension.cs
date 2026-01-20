@@ -1,4 +1,4 @@
-﻿using System.Security.Policy;
+using System.Security.Policy;
 using Common.Configurations;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
@@ -17,7 +17,8 @@ public static class SwaggerGenExtension
         var authority = cfg[$"{AuthorizationCfg.Section}:{AuthorizationCfg.Authority}"];
         var clientId = cfg[$"{AuthorizationCfg.Section}:{AuthorizationCfg.ClientId}"];
         var clientSecret = cfg[$"{AuthorizationCfg.Section}:{AuthorizationCfg.ClientSecret}"];
-        var scopesArray = cfg.GetValue<string[]>($"{AuthorizationCfg.Section}:{AuthorizationCfg.Scope}");
+        var scopesArray = cfg.GetValue<string[]>($"{AuthorizationCfg.Section}:{AuthorizationCfg.Scopes}")
+            ?? cfg.GetValue<string[]>($"{AuthorizationCfg.Section}:{AuthorizationCfg.Scope}");
         var oauthScopes = scopesArray?.ToDictionary(s => s, s => $"OpenID scope{s}");
         var authUrl = new Url($"{authority}/protocol/openid-connect/auth");
         var tokenUrl = new Url($"{authority}/protocol/openid-connect/token");
@@ -33,17 +34,17 @@ public static class SwaggerGenExtension
                 {
                     Name = cfg[$"{SwaggerGenCfg.Section}:{SwaggerGenCfg.ContactName}"],
                     Email = cfg[$"{SwaggerGenCfg.Section}:{SwaggerGenCfg.ContactEmail}"],
-                    Url = new Uri(cfg[$"{SwaggerGenCfg.Section}:{SwaggerGenCfg.ContactUrl}"]??throw new Exception("Url is null"))
+                    Url = new Uri(cfg[$"{SwaggerGenCfg.Section}:{SwaggerGenCfg.ContactUrl}"] ?? throw new Exception("Url is null"))
                 }
             });
-            otps.AddSecurityDefinition("Beader",new OpenApiSecurityScheme
+            otps.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
             {
                 In = ParameterLocation.Header,
                 Name = "Authorization",
                 Type = SecuritySchemeType.ApiKey,
                 Scheme = "Bearer",
                 BearerFormat = "JWT",
-                Description = "Enter 'Beader {token}'"
+                Description = "Enter 'Bearer {token}'"
             });
             otps.AddSecurityRequirement(new OpenApiSecurityRequirement
             {
@@ -52,9 +53,9 @@ public static class SwaggerGenExtension
                     Reference = new OpenApiReference
                     {
                         Type = ReferenceType.SecurityScheme,
-                        Id = "Beader"
+                        Id = "Bearer"
                     }
-                }]=Array.Empty<string>()
+                }] = Array.Empty<string>()
             });
             otps.OperationFilter<AuthorizeCheckOperationFilter>();
         });
@@ -65,15 +66,19 @@ public static class SwaggerGenExtension
         var cfg = app.Configuration;
         if (!cfg.GetValue<bool>($"{SwaggerGenCfg.Section}:{SwaggerGenCfg.Enable}")) return app;
         var clientId = cfg[$"{AuthorizationCfg.Section}:{AuthorizationCfg.ClientId}"];
-        var clientSecret=cfg[$"{AuthorizationCfg.Section}:{AuthorizationCfg.ClientSecret}"];
-        var scopes = cfg.GetValue<string[]>($"{AuthorizationCfg.Section}:{AuthorizationCfg.Scope}");
+        var clientSecret = cfg[$"{AuthorizationCfg.Section}:{AuthorizationCfg.ClientSecret}"];
+        var scopes = cfg.GetValue<string[]>($"{AuthorizationCfg.Section}:{AuthorizationCfg.Scopes}")
+            ?? cfg.GetValue<string[]>($"{AuthorizationCfg.Section}:{AuthorizationCfg.Scope}");
         app.UseSwagger();
         app.UseSwaggerUI(c =>
         {
-            c.SwaggerEndpoint("/swagger/v1/swagger.json","v1");
+            c.SwaggerEndpoint("/swagger/v1/swagger.json", "v1");
             c.OAuthClientId(clientId);
             c.OAuthClientSecret(clientSecret);
-            c.OAuthScopes(scopes);
+            if (scopes is { Length: > 0 })
+            {
+                c.OAuthScopes(scopes);
+            }
             c.OAuth2RedirectUrl(cfg[$"{AuthorizationCfg.Section}:{AuthorizationCfg.OAuth2RedirectUrl}"]);
         });
         return app;
