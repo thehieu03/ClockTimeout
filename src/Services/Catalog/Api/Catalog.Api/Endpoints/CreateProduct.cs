@@ -6,6 +6,7 @@ using Catalog.Api.Constants;
 using Catalog.Api.Models;
 using Catalog.Application.Features.Product.Commands;
 using Catalog.Application.Dtos;
+using Catalog.Application.Dtos.Products;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Common.Constants;

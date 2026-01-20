@@ -1,13 +1,13 @@
 using System.ComponentModel.DataAnnotations;
-using Common.Models;
 
-namespace Catalog.Application.Dtos;
+namespace Catalog.Application.Dtos.Products  ;
 
-public class CreateProductDto
+public class UpdateProductDto
 {
     [Required(ErrorMessage = "Product name is required")]
-    [StringLength(200, ErrorMessage = "Product name can't be longer than 200 characters", MinimumLength = 3)]
+    [StringLength(200, MinimumLength = 3)]
     public string? Name { get; set; }
+
     [Required(ErrorMessage = "SKU is required")]
     [StringLength(100, MinimumLength = 3)]
     public string? Sku { get; set; }
@@ -28,8 +28,6 @@ public class CreateProductDto
     public decimal? SalePrice { get; set; }
 
     public List<Guid>? CategoryIds { get; set; }
-    public List<UploadFileBytes>? UploadImages { get; set; }
-    public UploadFileBytes? UploadThumbnail { get; set; }
     public Guid? BrandId { get; set; }
     public List<string>? Colors { get; set; }
     public List<string>? Sizes { get; set; }

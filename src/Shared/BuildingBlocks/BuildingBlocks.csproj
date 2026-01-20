@@ -16,6 +16,7 @@
     <PackageReference Include="Microsoft.OpenApi" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Binder" />
+    <PackageReference Include="MongoDB.Driver" />
     <PackageReference Include="Newtonsoft.Json" />
     <PackageReference Include="OpenTelemetry" />
     <PackageReference Include="OpenTelemetry.Exporter.Prometheus.AspNetCore" />

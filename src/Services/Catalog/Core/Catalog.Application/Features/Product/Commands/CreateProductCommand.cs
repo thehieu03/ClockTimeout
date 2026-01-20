@@ -1,6 +1,7 @@
 using AutoMapper;
 using BuildingBlocks.CQRS;
 using Catalog.Application.Dtos;
+using Catalog.Application.Dtos.Products;
 using Catalog.Domain.Entities;
 using Common.Constants;
 using Common.Extensions;
