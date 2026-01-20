@@ -1,3 +1,13 @@
 global using Common.ValueObjects;
 global using BuildingBlocks.CQRS;
-global using Catalog.Application.Dtos.Abstractions;
+global using BuildingBlocks.Pagination;
+global using FluentValidation;
+global using Common.Models;
+global using Common.Constants;
+global using Common.Extensions;
+global using BuildingBlocks.Extensions;
+global using Marten;
+global using Catalog.Domain.Events;
+global using MediatR;
+global using Catalog.Domain.Entities;
+

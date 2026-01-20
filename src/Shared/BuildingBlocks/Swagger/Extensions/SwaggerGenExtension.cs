@@ -33,7 +33,7 @@ public static class SwaggerGenExtension
                 {
                     Name = cfg[$"{SwaggerGenCfg.Section}:{SwaggerGenCfg.ContactName}"],
                     Email = cfg[$"{SwaggerGenCfg.Section}:{SwaggerGenCfg.ContactEmail}"],
-                    Url = new Uri(cfg[$"{SwaggerGenCfg.Section}:{SwaggerGenCfg.ContactUrl}"])
+                    Url = new Uri(cfg[$"{SwaggerGenCfg.Section}:{SwaggerGenCfg.ContactUrl}"]??throw new Exception("Url is null"))
                 }
             });
             otps.AddSecurityDefinition("Beader",new OpenApiSecurityScheme

@@ -14,4 +14,7 @@
 		<PackageReference Include="MediatR" />
 		<PackageReference Include="Newtonsoft.Json" />
 	</ItemGroup>
+	<ItemGroup>
+	  <Folder Include="Event\" />
+	</ItemGroup>
 </Project>

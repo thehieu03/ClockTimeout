@@ -1,8 +1,9 @@
-﻿using Catalog.Domain.Enums;
+﻿using Catalog.Application.Dtos.Abstractions;
+using Catalog.Domain.Enums;
 
 namespace Catalog.Application.Dtos.Products;
 
-public class ProductInfoDto:DtoId<Guid>
+public class ProductInfoDto : DtoId<Guid>
 {
 
     #region Fields, Properties and Indexers

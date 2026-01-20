@@ -1,4 +1,6 @@
-﻿namespace Catalog.Application.Dtos.Categories;
+﻿using Catalog.Application.Dtos.Abstractions;
+
+namespace Catalog.Application.Dtos.Categories;
 
 public class CategoryTreeItemDto:DtoId<Guid>
 {

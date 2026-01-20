@@ -1,3 +1,6 @@
+using Catalog.Domain.Exceptions;
+using Common.Constants;
+
 namespace Catalog.Domain.Entities;
 
 public sealed class ProductEntity : Aggregate<Guid>
@@ -142,6 +145,17 @@ public sealed class ProductEntity : Aggregate<Guid>
     {
         Unit = unit;
         Weight = weight;
+        LastModifiedBy = performedBy;
+        LastModifiedOnUtc = DateTimeOffset.UtcNow;
+    }
+    // change status product
+    public void ChangeStatus(ProductStatus status, string performedBy)
+    {
+        if (Status == status)
+        {
+            throw new DomainException(MessageCode.DecisionFlowIllegal);
+        }
+        Status = status;
         LastModifiedBy = performedBy;
         LastModifiedOnUtc = DateTimeOffset.UtcNow;
     }

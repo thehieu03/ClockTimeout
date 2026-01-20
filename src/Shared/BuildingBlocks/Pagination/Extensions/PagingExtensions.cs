@@ -15,7 +15,6 @@ public static class PagingExtensions
         if (paging is null) throw new ArgumentException(nameof(paging));
         var (pageNumber, pageSize, skip) = Normalize(paging);
         return fluent.Skip(skip).Limit(pageSize);
-        return null;
     }
     public static IQueryable<T> WithPaging<T>(
         this IQueryable<T> query, PaginationRequest paging

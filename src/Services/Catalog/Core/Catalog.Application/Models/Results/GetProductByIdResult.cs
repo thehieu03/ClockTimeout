@@ -1,16 +1,16 @@
-﻿namespace Catalog.Application.Models.Results;
+namespace Catalog.Application.Models.Results;
 
 public sealed class GetProductByIdResult
 {
     #region Fields, Properties and Indexers
 
-    public ProductDto Product { get; init; }
+    public Catalog.Application.Dtos.Products.ProductDto Product { get; init; }
 
     #endregion
 
     #region Ctors
 
-    public GetProductByIdResult(ProductDto product)
+    public GetProductByIdResult(Catalog.Application.Dtos.Products.ProductDto product)
     {
         Product = product;
     }
