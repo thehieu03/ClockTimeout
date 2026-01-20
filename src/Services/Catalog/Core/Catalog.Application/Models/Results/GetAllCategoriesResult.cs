@@ -1,18 +1,16 @@
-﻿using Catalog.Application.Dtos.Categories;
-
 namespace Catalog.Application.Models.Results;
 
 public sealed class GetAllCategoriesResult
 {
     #region Fields, Properties and Indexers
 
-    public List<CategoryDto> Items { get; init; }
+    public List<Catalog.Application.Dtos.Categories.CategoryDto> Items { get; init; }
 
     #endregion
 
     #region Ctors
 
-    public GetAllCategoriesResult(List<CategoryDto> items)
+    public GetAllCategoriesResult(List<Catalog.Application.Dtos.Categories.CategoryDto> items)
     {
         Items = items;
     }

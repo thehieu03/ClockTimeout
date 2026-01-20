@@ -59,6 +59,8 @@ public class CatalogMappingProfile : Profile
     {
         // CategoryEntity -> CategoryDto
         CreateMap<CategoryEntity, CategoryDto>();
+        // CategoryEntity -> CategoryTreeItemDto
+        CreateMap<CategoryEntity, CategoryTreeItemDto>();
     }
 
     private void CreateProductMappings()

@@ -228,6 +228,14 @@ public sealed class MessageCode
 
     public const string BrandNameIsRequired = "BRAND_NAME_IS_REQUIRED";
 
+    public const string BrandNotFound = "BRAND_NOT_FOUND";
+
+    public const string BrandSlugAlreadyExists = "BRAND_SLUG_ALREADY_EXISTS";
+
+    public const string BrandIsUsedByProducts = "BRAND_IS_USED_BY_PRODUCTS";
+
+    public const string BrandNameMaxLength = "BRAND_NAME_MAX_LENGTH";
+
     public const string CategoryIdIsRequired = "CATEGORY_ID_IS_REQUIRED";
 
     public const string CategoryNameIsRequired = "CATEGORY_NAME_IS_REQUIRED";
@@ -235,6 +243,22 @@ public sealed class MessageCode
     public const string CategoryHasChildren = "CATEGORY_HAS_CHILDREN";
 
     public const string CategoryCannotBeItsOwnParent = "CATEGORY_CANNOT_BE_ITS_OWN_PARENT";
+
+    public const string CategoryNotFound = "CATEGORY_NOT_FOUND";
+
+    public const string CategorySlugAlreadyExists = "CATEGORY_SLUG_ALREADY_EXISTS";
+
+    public const string CategoryParentNotFound = "CATEGORY_PARENT_NOT_FOUND";
+
+    public const string CategoryCircularReference = "CATEGORY_CIRCULAR_REFERENCE";
+
+    public const string CategoryCannotBeParentOfItself = "CATEGORY_CANNOT_BE_PARENT_OF_ITSELF";
+
+    public const string CategoryIsUsedByProducts = "CATEGORY_IS_USED_BY_PRODUCTS";
+
+    public const string CategoryNameMaxLength = "CATEGORY_NAME_MAX_LENGTH";
+
+    public const string CategoryDescriptionMaxLength = "CATEGORY_DESCRIPTION_MAX_LENGTH";
 
     public const string MaxUsageIsRequired = "MAX_USAGE_IS_REQUIRED";
 

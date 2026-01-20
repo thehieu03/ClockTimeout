@@ -21,4 +21,31 @@ public sealed class ApiRoutes
 
         #endregion
     }
+
+    public static class Category
+    {
+        #region Constants
+        public const string Tags = "Categories";
+        public const string Base = "/categories";
+        public const string BaseAdmin = "/admin/categories";
+        public const string Create = $"{BaseAdmin}";
+        public const string Update = $"{BaseAdmin}/{{categoryId}}";
+        public const string Delete = $"{BaseAdmin}/{{categoryId}}";
+        public const string GetAll = $"{BaseAdmin}";
+        public const string GetTree = $"{BaseAdmin}/tree";
+        #endregion
+    }
+
+    public static class Brand
+    {
+        #region Constants
+        public const string Tags = "Brands";
+        public const string Base = "/brands";
+        public const string BaseAdmin = "/admin/brands";
+        public const string Create = $"{BaseAdmin}";
+        public const string Update = $"{BaseAdmin}/{{brandId}}";
+        public const string Delete = $"{BaseAdmin}/{{brandId}}";
+        public const string GetAll = $"{BaseAdmin}";
+        #endregion
+    }
 }

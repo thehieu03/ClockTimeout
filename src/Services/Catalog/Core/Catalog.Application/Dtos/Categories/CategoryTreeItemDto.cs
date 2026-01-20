@@ -2,7 +2,7 @@
 
 namespace Catalog.Application.Dtos.Categories;
 
-public class CategoryTreeItemDto:DtoId<Guid>
+public class CategoryTreeItemDto : DtoId<Guid>
 {
     #region Fields, Properties and Indexers
 
@@ -13,8 +13,6 @@ public class CategoryTreeItemDto:DtoId<Guid>
     public string? Slug { get; set; }
 
     public Guid? ParentId { get; set; }
-
-    public bool HasChildren => Children?.Count > 0;
 
     public List<CategoryTreeItemDto>? Children { get; set; }
 
