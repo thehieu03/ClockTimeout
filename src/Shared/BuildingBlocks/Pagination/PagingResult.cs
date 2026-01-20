@@ -19,6 +19,7 @@ public sealed class PagingResult
     #endregion
 
     #region ctor
+
     private PagingResult(long totalCount, PaginationRequest pagination)
     {
         TotalCount = totalCount;
@@ -26,21 +27,23 @@ public sealed class PagingResult
         PageSize = pagination.PageSize;
         HasItem = totalCount > 0;
     }
+
     #endregion
 
     #region Methods
+
     public static PagingResult Of(long totalCount, PaginationRequest pagination)
     {
-        var result=new PagingResult(totalCount, pagination);
+        var result = new PagingResult(totalCount, pagination);
         if (pagination.PageSize > 0)
         {
             result.TotalPages = pagination.GetTotalPage(totalCount);
             result.HasNextPage = pagination.PageNumber < result.TotalPages;
-            result.HasPreviousPage=pagination.PageNumber>1 && pagination.PageNumber<=result.TotalPages;
+            result.HasPreviousPage = pagination.PageNumber > 1 && pagination.PageNumber <= result.TotalPages;
         }
         return result;
     }
-    
 
     #endregion
+
 }

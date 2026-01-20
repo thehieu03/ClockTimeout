@@ -1,6 +1,8 @@
 global using Common.ValueObjects;
 global using BuildingBlocks.CQRS;
 global using BuildingBlocks.Pagination;
+
+global using Catalog.Application.Dtos.Products;
 global using FluentValidation;
 global using Common.Models;
 global using Common.Constants;
@@ -10,4 +12,4 @@ global using Marten;
 global using Catalog.Domain.Events;
 global using MediatR;
 global using Catalog.Domain.Entities;
-
+global using AutoMapper;

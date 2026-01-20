@@ -4,13 +4,13 @@ public sealed class GetAllAvailableProductsResult
 {
     #region Fields, Properties and Indexers
 
-    public List<ProductDto> Items { get; init; }
+    public List<Dtos.Products.ProductDto> Items { get; init; }
 
     #endregion
 
     #region Ctors
 
-    public GetAllAvailableProductsResult(List<ProductDto> items)
+    public GetAllAvailableProductsResult(List<Dtos.Products.ProductDto> items)
     {
         Items = items;
     }

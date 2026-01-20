@@ -1,16 +1,16 @@
-﻿namespace Catalog.Application.Models.Results;
+namespace Catalog.Application.Models.Results;
 
 public sealed class GetAllProductsResult
 {
     #region Fields, Properties and Indexers
 
-    public List<ProductDto> Items { get; init; }
+    public List<Catalog.Application.Dtos.Products.ProductDto> Items { get; init; }
 
     #endregion
 
     #region Ctors
 
-    public GetAllProductsResult(List<ProductDto> items)
+    public GetAllProductsResult(List<Catalog.Application.Dtos.Products.ProductDto> items)
     {
         Items = items;
     }

@@ -17,10 +17,9 @@ public sealed class CatalogApiMappingProfile : Profile
             .ForMember(dest => dest.UploadImages, otp => otp.Ignore())
             .ForMember(dest => dest.UploadThumbnail, otp => otp.Ignore());// Files are handled separately
 
-        // CreateProductRequest => CreateProductDto
-        CreateMap<UpdateProductRequest, CreateProductDto>()
-            .ForMember(dest => dest.UploadImages, otp => otp.Ignore())
-            .ForMember(dest => dest.UploadThumbnail, otp => otp.Ignore());// Files are handled separately
+        // UpdateProductRequest => UpdateProductDto
+        CreateMap<UpdateProductRequest, UpdateProductDto>()
+            .ForMember(dest => dest.CategoryIds, otp => otp.Ignore());
 
     }
     #endregion

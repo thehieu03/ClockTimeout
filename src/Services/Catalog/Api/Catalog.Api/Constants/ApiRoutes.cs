@@ -14,7 +14,7 @@ public sealed class ApiRoutes
         public const string Unpublish = $"{BaseAdmin}/{{productId}}/unpublish";
         public const string Publish = $"{BaseAdmin}/{{productId}}/publish";
         public const string GetProducts = $"{BaseAdmin}";
-        public const string GetProductById = $"{BaseAdmin}/{{producdtId}}";
+        public const string GetProductById = $"{BaseAdmin}/{{productId}}";
         public const string GetAllProducts = $"{BaseAdmin}/all";
         public const string GetPublicProductById = $"{Base}/{{productId}}";
         public const string GetPublicProducts = $"{Base}";

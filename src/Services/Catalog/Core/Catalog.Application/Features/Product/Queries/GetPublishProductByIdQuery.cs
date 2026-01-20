@@ -1,0 +1,50 @@
+using AutoMapper;
+using Catalog.Application.Models.Results;
+using Catalog.Domain.Entities;
+using Marten;
+
+namespace Catalog.Application.Features.Product.Queries;
+
+public sealed record GetPublishProductByIdQuery(Guid ProductId) : IQuery<GetPublishProductByIdResult>;
+
+public sealed class GetPublishProductByIdQueryHandler(IDocumentSession session, IMapper mapper) : IQueryHandler<GetPublishProductByIdQuery, GetPublishProductByIdResult>
+{
+    public async Task<GetPublishProductByIdResult> Handle(GetPublishProductByIdQuery query, CancellationToken cancellationToken)
+    {
+        var result = await session.Query<ProductEntity>()
+            .Where(x => x.Id == query.ProductId && x.Published)
+            .SingleOrDefaultAsync(cancellationToken)
+            ?? throw new NotFoundException(MessageCode.ResourceNotFound, query.ProductId);
+
+        var categories = await session.Query<CategoryEntity>()
+            .ToListAsync(cancellationToken);
+        var brands = await session.Query<BrandEntity>()
+            .ToListAsync(cancellationToken);
+
+        var response = mapper.Map<Catalog.Application.Dtos.Products.PublishProductDto>(result);
+
+        if (result.CategoryIds != null && result.CategoryIds.Count > 0)
+        {
+            foreach (var categoryId in result.CategoryIds)
+            {
+                var category = categories.FirstOrDefault(c => c.Id == categoryId);
+                if (category != null)
+                {
+                    response.CategoryNames ??= [];
+                    response.CategoryNames.Add(category.Name!);
+                }
+            }
+        }
+
+        if (result.BrandId.HasValue)
+        {
+            var brand = brands.FirstOrDefault(b => b.Id == result.BrandId.Value);
+            if (brand != null)
+            {
+                response.BrandName = brand.Name;
+            }
+        }
+
+        return new GetPublishProductByIdResult(response);
+    }
+}

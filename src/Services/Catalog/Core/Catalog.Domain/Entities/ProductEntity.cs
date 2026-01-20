@@ -159,6 +159,39 @@ public sealed class ProductEntity : Aggregate<Guid>
         LastModifiedBy = performedBy;
         LastModifiedOnUtc = DateTimeOffset.UtcNow;
     }
+
+    public void AddOrUpdateThumbnail(ProductImageEntity? newImage, string? currentImageUrl = null)
+    {
+        if (newImage is null && string.IsNullOrWhiteSpace(currentImageUrl))
+        {
+            return;
+        }
+        if (Thumbnail != null && !string.IsNullOrWhiteSpace(Thumbnail.PublicURL)
+            && Thumbnail.PublicURL!.Equals(currentImageUrl, StringComparison.OrdinalIgnoreCase))
+        {
+            return;
+        }
+        Thumbnail = newImage;
+    }
+
+    public void AddOrUpdateImages(List<ProductImageEntity>? newImages = null, IEnumerable<string>? curentImageUrls = null)
+    {
+        if ((newImages is null && !newImages.Any()) &&
+            (curentImageUrls is null && !curentImageUrls.Any())) return;
+        Images ??= new List<ProductImageEntity>();
+        var oldByUrl = Images
+            .Where(i => !string.IsNullOrWhiteSpace(i.PublicURL))
+            .ToDictionary(i => i.PublicURL!, StringComparer.OrdinalIgnoreCase);
+        var keepOle = (curentImageUrls ?? Enumerable.Empty<string>())
+            .Where(u => !string.IsNullOrWhiteSpace(u) && oldByUrl.ContainsKey(u))
+            .Select(u => oldByUrl[u]);
+        var result = (newImages ?? Enumerable.Empty<ProductImageEntity>())
+            .Concat(keepOle)
+            .GroupBy(i => string.IsNullOrWhiteSpace(i.FileId) ? i.PublicURL : i.FileId, StringComparer.OrdinalIgnoreCase)
+            .Select(g => g.First())
+            .ToList();
+        Images=result;
+    }
     #endregion
 }
 

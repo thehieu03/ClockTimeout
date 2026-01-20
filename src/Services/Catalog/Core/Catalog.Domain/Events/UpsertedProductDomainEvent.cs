@@ -1,4 +1,6 @@
-﻿namespace Catalog.Domain.Events;
+using MediatR;
+
+namespace Catalog.Domain.Events;
 
 public sealed record UpsertedProductDomainEvent(
     Guid Id,
@@ -14,4 +16,4 @@ public sealed record UpsertedProductDomainEvent(
     DateTimeOffset CreatedOnUtc,
     string CreatedBy,
     DateTimeOffset? LastModifiedOnUtc,
-    string? LastModifiedBy) : IDomainEvent;
+    string? LastModifiedBy) : IDomainEvent, INotification;
