@@ -1,4 +1,4 @@
-namespace Catalog.Application.Models.Filters;
+namespace Catalog.Application.Dtos.Filters;
 
 public sealed class GetAllAvailableProductsResult
 {

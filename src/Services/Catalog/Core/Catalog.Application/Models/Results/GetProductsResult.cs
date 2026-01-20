@@ -1,7 +1,4 @@
-﻿using Common.Models;
-using BuildingBlocks.Pagination;
-
-namespace Catalog.Application.Models.Results
+﻿namespace Catalog.Application.Models.Results
 {
     public sealed class GetProductsResult
     {
