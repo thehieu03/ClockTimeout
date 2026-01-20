@@ -1,4 +1,4 @@
-namespace Catalog.Application.Models.Results;
+﻿namespace Catalog.Application.Models.Results;
 
 public sealed class GetProductByIdResult
 {

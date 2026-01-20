@@ -3,11 +3,11 @@
 using BuildingBlocks.Extensions;
 using BuildingBlocks.Swagger.Extensions;
 using Catalog.Api.Constants;
-using Catalog.Api.Mappings;
 using Catalog.Api.Models;
 using Catalog.Application.Features.Product.Commands;
 using Catalog.Application.Dtos;
 using Catalog.Application.Dtos.Products;
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Common.Constants;
 using Common.Models;
@@ -41,6 +41,7 @@ public sealed class CreateProduct : ICarterModule
 
     private async Task<ApiCreatedResponse<Guid>> HandleCreateProductAsync(
         ISender sender,
+        IMapper mapper,
         IHttpContextAccessor httpContext,
         [FromForm] CreateProductRequest req)
     {
@@ -49,7 +50,7 @@ public sealed class CreateProduct : ICarterModule
         {
             req.ImageFiles = httpContext.HttpContext.Request.Form.Files.ToList();
         }
-        var dto = CatalogApiMapper.Mapper.Map<CreateProductDto>(req);
+        var dto = mapper.Map<CreateProductDto>(req);
         if (req.ImageFiles != null && req.ImageFiles.Count > 0)
         {
             dto.UploadImages ??= new();
