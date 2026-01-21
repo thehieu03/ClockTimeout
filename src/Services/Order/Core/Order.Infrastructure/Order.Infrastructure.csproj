@@ -19,7 +19,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Data\Configurations\" />
-    <Folder Include="Repositories\" />
-    <Folder Include="Sservices\" />
+    <Folder Include="Services\" />
   </ItemGroup>
 </Project>

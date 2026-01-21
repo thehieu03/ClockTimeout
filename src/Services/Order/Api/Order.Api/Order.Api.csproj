@@ -18,5 +18,9 @@
       <Folder Include="Middleware\" />
       <Folder Include="Models\" />
     </ItemGroup>
+    <ItemGroup>
+      <ProjectReference Include="..\..\Core\Order.Application\Order.Application.csproj" />
+      <ProjectReference Include="..\..\Core\Order.Infrastructure\Order.Infrastructure.csproj" />
+    </ItemGroup>
 
 </Project>
