@@ -1,25 +1,23 @@
+# File override chứa: ports, healthcheck, environment, networks, depends_on, volumes mapping
+
 networks:
   progcoder_network:
     driver: bridge
 
 services:
   postgres-sql:
-    image: postgres:16-alpine
-    container_name: postgres-sql
     restart: unless-stopped
+    ports:
+      - "5433:5432"
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres123
       POSTGRES_DB: catalog_db
       PGDATA: /var/lib/postgresql/data
-    ports:
-      - "5433:5432"
     volumes:
-      - ./docker-volumes/postgres:/var/lib/postgresql/data
+      - ./docker-volumes/postgresql:/var/lib/postgresql/data
     networks:
       - progcoder_network
-    # Sử dụng entrypoint gốc của PostgreSQL
-    # Permission errors sẽ được ignore tự động trên Windows/WSL
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres"]
       interval: 10s
@@ -28,8 +26,6 @@ services:
       start_period: 30s
 
   mongodb:
-    image: mongo:7.0
-    container_name: mongodb
     restart: unless-stopped
     ports:
       - "27018:27017"
@@ -48,14 +44,12 @@ services:
       start_period: 40s
 
   mysql:
-    image: mysql:8.0
-    container_name: mysql
     restart: unless-stopped
+    ports:
+      - "3307:3306"
     environment:
       MYSQL_ROOT_PASSWORD: root123
       MYSQL_DATABASE: inventory_db
-    ports:
-      - "3307:3306"
     volumes:
       - ./docker-volumes/mysql:/var/lib/mysql
     networks:
@@ -69,22 +63,14 @@ services:
       start_period: 30s
 
   sql-server:
-    # Azure SQL Edge - Nhẹ nhất (~400MB), tương thích SQL Server, phù hợp cho dev/test
-    # Alternative options:
-    # - mcr.microsoft.com/mssql/server:2022-latest (SQL Server 2022, ~1.5GB)
-    # - mcr.microsoft.com/mssql/server:2019-latest (SQL Server 2019, ~1.2GB)
-    # - mcr.microsoft.com/mssql/server:2022-latest với MSSQL_PID=Express (Express edition, ~1GB)
-    image: mcr.microsoft.com/azure-sql-edge:latest
-    container_name: sql-server
     restart: unless-stopped
+    ports:
+      - "1434:1433"
     environment:
       ACCEPT_EULA: "Y"
       MSSQL_SA_PASSWORD: "SqlServer123!"
-      # Azure SQL Edge không cần MSSQL_PID
-    ports:
-      - "1434:1433"
     volumes:
-      - ./docker-volumes/sqlserver:/var/opt/mssql
+      - ./docker-volumes/sql-server:/var/opt/mssql
     networks:
       - progcoder_network
     healthcheck:
@@ -96,11 +82,9 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
-      start_period: 40s  # Azure SQL Edge khởi động nhanh hơn
+      start_period: 40s
 
   redis:
-    image: redis:7.0-alpine
-    container_name: redis
     restart: unless-stopped
     ports:
       - "6379:6379"
@@ -117,15 +101,13 @@ services:
       start_period: 30s
 
   rabbitmq:
-    image: rabbitmq:3.11-management-alpine
-    container_name: rabbitmq
     restart: unless-stopped
-    environment:
-      RABBITMQ_DEFAULT_USER: admin
-      RABBITMQ_DEFAULT_PASS: admin123
     ports:
       - "5673:5672"
       - "15673:15672"
+    environment:
+      RABBITMQ_DEFAULT_USER: admin
+      RABBITMQ_DEFAULT_PASS: admin123
     volumes:
       - ./docker-volumes/rabbitmq:/var/lib/rabbitmq
     networks:
@@ -136,3 +118,32 @@ services:
       timeout: 10s
       retries: 5
       start_period: 60s
+
+  catalog-api:
+    restart: unless-stopped
+    mem_limit: 512m
+    mem_reservation: 256m
+    cpus: "1.0"
+    ports:
+      - "5001:80"    # HTTP port (mapped to 5001 for consistency)
+      - "5000:80"    # HTTP port (alternative mapping)
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:80
+      - ConnectionStrings__Database=Host=postgres-sql;Port=5432;Database=catalog_db;Username=postgres;Password=postgres123
+      - DOTNET_SYSTEM_GC_CONCURRENT=true
+      - DOTNET_SYSTEM_GC_SERVER=false
+      - COMPlus_GCHeapHardLimit=400000000
+    networks:
+      - progcoder_network
+    depends_on:
+      postgres-sql:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:80/swagger/index.html || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+# Volumes are now mapped to local docker-volumes folder

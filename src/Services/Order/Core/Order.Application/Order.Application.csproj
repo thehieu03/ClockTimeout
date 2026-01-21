@@ -1,0 +1,25 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <ItemGroup>
+    <PackageReference Include="AutoMapper" />
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" />
+    <PackageReference Include="FluentValidation" />
+    <PackageReference Include="FluentValidation.DependencyInjectionExtensions" />
+    <PackageReference Include="MediatR" />
+    <PackageReference Include="Microsoft.FeatureManagement" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\Shared\BuildingBlocks\BuildingBlocks.csproj" />
+    <ProjectReference Include="..\..\..\..\Shared\Common\Common.csproj" />
+    <ProjectReference Include="..\Order.Domain\Order.Domain.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Dtos\Orders\" />
+    <Folder Include="Features\Order\Commands\" />
+    <Folder Include="Features\Order\EventHandlers\" />
+    <Folder Include="Features\Order\Queries\" />
+    <Folder Include="Mappings\" />
+    <Folder Include="Models\Filters\" />
+    <Folder Include="Models\Results\" />
+    <Folder Include="Services\" />
+  </ItemGroup>
+</Project>

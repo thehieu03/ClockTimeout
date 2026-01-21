@@ -1,4 +1,4 @@
-# Build stage
+# Build stage - Tối ưu để giảm kích thước và RAM
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /src
 
@@ -16,18 +16,24 @@ RUN dotnet restore "src/Services/Catalog/Api/Catalog.Api/Catalog.Api.csproj"
 # Copy everything else and build
 COPY . .
 WORKDIR "/src/src/Services/Catalog/Api/Catalog.Api"
-RUN dotnet build "Catalog.Api.csproj" -c Release -o /app/build
+# Restore lại sau khi copy để đảm bảo tất cả packages được restore đầy đủ
+RUN dotnet restore "Catalog.Api.csproj" \
+    && dotnet build "Catalog.Api.csproj" -c Release -o /app/build \
+    && dotnet clean
 
-# Publish stage
+# Publish stage - Cleanup sau khi publish
 FROM build AS publish
-RUN dotnet publish "Catalog.Api.csproj" -c Release -o /app/publish /p:UseAppHost=false
+RUN dotnet publish "Catalog.Api.csproj" -c Release -o /app/publish /p:UseAppHost=false \
+    && rm -rf /src/bin /src/obj
 
-# Runtime stage
+# Runtime stage - Sử dụng image chuẩn (có curl cho healthcheck)
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS final
 WORKDIR /app
+
 EXPOSE 80
 EXPOSE 443
 
-# Copy published files (includes appsettings.json, appsettings.Development.json, appsettings.Docker.json)
+# Copy published files
 COPY --from=publish /app/publish .
+
 ENTRYPOINT ["dotnet", "Catalog.Api.dll"]

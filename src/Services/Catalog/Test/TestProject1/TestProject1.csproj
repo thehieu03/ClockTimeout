@@ -1,5 +1,12 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
+    <PropertyGroup>
+        <IsTestProject>true</IsTestProject>
+        <TargetFramework>net8.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
     <Target Name="DisableOpenApiSourceGenerator" BeforeTargets="CoreCompile">
         <ItemGroup>
             <Analyzer Remove="@(Analyzer)" Condition="$([System.String]::Copy('%(Filename)').Contains('Microsoft.AspNetCore.OpenApi.SourceGenerators'))" />
@@ -7,7 +14,9 @@
     </Target>
 
     <ItemGroup>
-        <PackageReference Include="MSTest"/>
+        <PackageReference Include="Microsoft.NET.Test.Sdk"/>
+        <PackageReference Include="MSTest.TestAdapter"/>
+        <PackageReference Include="MSTest.TestFramework"/>
         <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory"/>
         <PackageReference Include="Moq"/>
     </ItemGroup>

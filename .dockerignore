@@ -1,0 +1,73 @@
+# Build artifacts - KHÔNG copy vào Docker image
+**/bin/
+**/obj/
+**/out/
+**/publish/
+
+# Visual Studio / Rider
+**/.vs/
+**/.idea/
+**/*.user
+**/*.suo
+**/*.sln.docstates
+**/*.csproj.user
+
+# Test results
+**/TestResults/
+**/[Tt]est[Rr]esult*/
+**/*.trx
+**/*.coverage
+
+# Logs
+**/*.log
+**/logs/
+**/Logs/
+
+# NuGet
+**/packages/
+**/*.nupkg
+**/*.snupkg
+**/project.lock.json
+**/project.fragment.lock.json
+**/artifacts/
+
+# OS files
+**/.DS_Store
+**/Thumbs.db
+**/Desktop.ini
+
+# Git
+**/.git/
+**/.gitignore
+**/.gitattributes
+
+# Docker
+**/Dockerfile*
+**/docker-compose*.yml
+**/.dockerignore
+
+# Environment files
+**/.env
+**/.env.local
+**/.env.*.local
+**/*.env
+
+# IDE
+**/.vscode/
+**/.vs/
+**/.idea/
+**/*.swp
+**/*.swo
+
+# Temporary files
+**/*.tmp
+**/*.temp
+**/*~
+
+# Documentation
+**/README.md
+**/LICENSE
+**/*.md
+
+# Database
+**/docker-volumes/

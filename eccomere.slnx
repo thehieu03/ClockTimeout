@@ -17,6 +17,15 @@
   <Folder Name="/src/Services/Catalog/Test/">
     <Project Path="src/Services/Catalog/Test/TestProject1/TestProject1.csproj" />
   </Folder>
+  <Folder Name="/src/Services/Order/" />
+  <Folder Name="/src/Services/Order/Api/">
+    <Project Path="src/Services/Order/Api/Order.Api/Order.Api.csproj" />
+  </Folder>
+  <Folder Name="/src/Services/Order/Core/">
+    <Project Path="src/Services/Order/Core/Order.Application/Order.Application.csproj" />
+    <Project Path="src/Services/Order/Core/Order.Domain/Order.Domain.csproj" />
+    <Project Path="src/Services/Order/Core/Order.Infrastructure/Order.Infrastructure.csproj" />
+  </Folder>
   <Folder Name="/src/Shared/">
     <Project Path="src/Shared/BuildingBlocks/BuildingBlocks.csproj" />
     <Project Path="src/Shared/Common/Common.csproj" />
