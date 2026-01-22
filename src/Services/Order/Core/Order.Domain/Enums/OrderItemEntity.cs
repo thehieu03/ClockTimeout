@@ -1,0 +1,63 @@
+﻿using Order.Domain.Abstractions;
+using Order.Domain.ValueObjects;
+
+namespace Order.Domain.Enums;
+
+public sealed class OrderItemEntity : Entity<Guid>
+{
+    #region Fields, Properties and Indexers
+
+    public Guid OrderId { get; set; } = default!;
+
+    public Product Product { get; set; } = default!;
+
+    public int Quantity { get; set; } = default!;
+
+    public decimal LineTotal
+    {
+        get => Product.Price * Quantity;
+        private set { }
+    }
+
+    #endregion
+
+    #region Factories
+
+    public static OrderItemEntity Create(
+        Guid id,
+        Guid orderId,
+        Product product,
+        int quantity,
+        string performedBy)
+    {
+        ArgumentOutOfRangeException.ThrowIfNegativeOrZero(quantity);
+
+        var orderItem = new OrderItemEntity
+        {
+            Id = id,
+            OrderId = orderId,
+            Product = product,
+            Quantity = quantity,
+            CreatedBy = performedBy,
+            LastModifiedBy = performedBy,
+            CreatedOnUtc = DateTimeOffset.UtcNow,
+            LastModifiedOnUtc = DateTimeOffset.UtcNow
+        };
+
+        return orderItem;
+    }
+
+    #endregion
+
+    #region Methods
+
+    public void UpdateQuantity(int quantity, string performBy)
+    {
+        ArgumentOutOfRangeException.ThrowIfNegativeOrZero(quantity);
+        Quantity = quantity;
+        LastModifiedBy = performBy;
+        LastModifiedOnUtc = DateTimeOffset.UtcNow;
+    }
+
+    #endregion
+}

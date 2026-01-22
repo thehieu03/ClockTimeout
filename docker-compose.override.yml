@@ -69,6 +69,11 @@ services:
     environment:
       ACCEPT_EULA: "Y"
       MSSQL_SA_PASSWORD: "SqlServer123!"
+      MSSQL_COLLATION: "SQL_Latin1_General_CP1_CI_AS"
+      MSSQL_PID: "Developer"
+      MSSQL_DUMP_DIR: "/var/opt/mssql/log"
+      MSSQL_ENABLE_HADR_SUPPORT: "0"
+    command: /opt/mssql/bin/sqlservr --disable-dump
     volumes:
       - ./docker-volumes/sql-server:/var/opt/mssql
     networks:

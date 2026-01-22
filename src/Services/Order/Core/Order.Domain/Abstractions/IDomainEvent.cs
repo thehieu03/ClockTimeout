@@ -2,15 +2,16 @@
 
 namespace Order.Domain.Abstractions;
 
-public class IDomainEvent:INotification
+public interface IDomainEvent:INotification
 {
 
     #region Fields, Properties and Indexers
-    Guid EventId { get; set; }=Guid.NewGuid();
-    public DateTimeOffset OccurredOnUtc { get; set; } = DateTime.Now;
-    public string EventType => GetType()?.AssemblyQualifiedName??string.Empty;
-    
-    
+
+    Guid EventId => Guid.NewGuid();
+
+    public DateTimeOffset OccurredOn => DateTime.Now;
+
+    public string EventType => GetType()?.AssemblyQualifiedName ?? string.Empty;
 
     #endregion
 }
