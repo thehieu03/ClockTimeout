@@ -13,7 +13,6 @@
     <ProjectReference Include="..\Order.Domain\Order.Domain.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Dtos\Orders\" />
     <Folder Include="Features\Order\Commands\" />
     <Folder Include="Features\Order\EventHandlers\" />
     <Folder Include="Features\Order\Queries\" />

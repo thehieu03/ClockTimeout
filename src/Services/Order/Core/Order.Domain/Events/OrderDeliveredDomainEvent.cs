@@ -1,4 +1,5 @@
 ﻿using Order.Domain.Abstractions;
+using Order.Domain.Entities;
 using Order.Domain.Enums;
 
 namespace Order.Domain.Events;

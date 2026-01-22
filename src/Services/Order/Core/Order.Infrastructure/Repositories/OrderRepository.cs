@@ -2,7 +2,7 @@
 using BuildingBlocks.Pagination.Extensions;
 using Common.Models;
 using Microsoft.EntityFrameworkCore;
-using Order.Domain.Enums;
+using Order.Domain.Entities;
 using Order.Domain.Repositories;
 using Order.Infrastructure.Data;
 

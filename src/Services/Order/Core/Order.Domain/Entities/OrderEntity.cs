@@ -1,8 +1,9 @@
 ﻿using Order.Domain.Abstractions;
+using Order.Domain.Enums;
 using Order.Domain.Events;
 using Order.Domain.ValueObjects;
 
-namespace Order.Domain.Enums;
+namespace Order.Domain.Entities;
 
 public sealed class OrderEntity : Aggregate<Guid>
 {

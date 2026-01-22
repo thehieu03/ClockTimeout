@@ -1,4 +1,4 @@
-﻿using Order.Domain.Enums;
+﻿using Order.Domain.Entities;
 
 namespace Order.Domain.Repositories;
 

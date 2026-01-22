@@ -1,5 +1,6 @@
 ﻿using System.Reflection;
 using Microsoft.EntityFrameworkCore;
+using Order.Domain.Entities;
 using Order.Domain.Enums;
 
 namespace Order.Infrastructure.Data;

@@ -1,7 +1,7 @@
 ﻿using Order.Domain.Abstractions;
 using Order.Domain.ValueObjects;
 
-namespace Order.Domain.Enums;
+namespace Order.Domain.Entities;
 
 public sealed class OrderItemEntity : Entity<Guid>
 {
