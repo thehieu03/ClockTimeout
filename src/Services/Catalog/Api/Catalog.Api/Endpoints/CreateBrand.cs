@@ -7,7 +7,6 @@ using Catalog.Application.Dtos.Brands;
 using Catalog.Application.Features.Brand.Commands;
 using Common.Constants;
 using Common.Models.Reponses;
-using Common.ValueObjects;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Catalog.Api.Endpoints;

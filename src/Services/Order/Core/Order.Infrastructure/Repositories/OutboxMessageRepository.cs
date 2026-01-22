@@ -1,6 +1,10 @@
-﻿namespace Order.Infrastructure.Repositories;
+﻿using Order.Domain.Entities;
+using Order.Domain.Repositories;
+using Order.Infrastructure.Data;
 
-public class OutboxMessageRepository
+namespace Order.Infrastructure.Repositories;
+
+public class OutboxMessageRepository(ApplicationDbContext context):Repository<OutBoxMessageEntity>(context),IOutboxMessageRepository
 {
     
 }

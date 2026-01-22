@@ -1,5 +1,5 @@
 # Build stage - Tối ưu để giảm kích thước và RAM
-FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
 WORKDIR /src
 
 # Copy solution and project files for dependency restoration
@@ -27,7 +27,7 @@ RUN dotnet publish "Catalog.Api.csproj" -c Release -o /app/publish /p:UseAppHost
     && rm -rf /src/bin /src/obj
 
 # Runtime stage - Sử dụng image chuẩn (có curl cho healthcheck)
-FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS final
+FROM mcr.microsoft.com/dotnet/aspnet:10.0 AS final
 WORKDIR /app
 
 EXPOSE 80

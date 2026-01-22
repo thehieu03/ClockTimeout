@@ -1,6 +1,9 @@
 ﻿namespace Order.Domain.Exceptions;
 
-public class DomainExceptions
+public class DomainException:Exception
 {
-    
+    public DomainException(string message):base(message)
+    {
+        
+    }
 }

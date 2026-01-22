@@ -1,6 +1,2 @@
-﻿namespace Order.Domain;
-
-public class GlobalUsing
-{
-    
-}
+﻿global using Common.Constants;
+global using Common.Models;

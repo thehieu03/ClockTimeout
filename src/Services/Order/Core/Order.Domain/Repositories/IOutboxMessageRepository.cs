@@ -1,6 +1,13 @@
-﻿namespace Order.Domain.Repositories;
+﻿using Order.Domain.Entities;
 
-public interface IOutboxMessageRepository
+namespace Order.Domain.Repositories;
+
+public interface IOutboxMessageRepository:IRepository<OutBoxMessageEntity>
 {
+
+    #region Methods
+
     
+
+    #endregion
 }

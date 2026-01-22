@@ -1,6 +1,2 @@
-﻿namespace Order.Infrastructure;
-
-public class GlobalUsing
-{
-    
-}
+﻿global using Common.Constants;
+global using Common.Models;

@@ -33,4 +33,7 @@
   
   <!-- Solution Items -->
   <Folder Name="/Solution Items/" />
+  <Folder Name="/src/Shared/Contracts/">
+    <Project Path="src/Shared/Contracts/Catalog.Contract/Catalog.Contract.csproj" />
+  </Folder>
 </Solution>

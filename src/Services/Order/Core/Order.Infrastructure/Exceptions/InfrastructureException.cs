@@ -1,6 +1,11 @@
 ﻿namespace Order.Infrastructure.Exceptions;
 
-public class InfrastructureException
+public sealed class InfrastructureException:Exception
 {
-    
+    # region Constructors
+    public InfrastructureException(string message):base(message)
+    {
+        
+    }
+    #endregion
 }

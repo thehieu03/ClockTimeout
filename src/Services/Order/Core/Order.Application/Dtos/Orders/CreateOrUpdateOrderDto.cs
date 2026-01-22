@@ -1,6 +1,20 @@
 ﻿namespace Order.Application.Dtos.Orders;
 
-public class CreateOrUpdateOrderDto
+public sealed class CreateOrUpdateOrderDto
 {
-    
+    #region Fields, Properties and Indexers
+
+    public Guid? BasketId { get; set; }
+
+    public CustomerDto Customer { get; set; } = default!;
+
+    public AddressDto ShippingAddress { get; set; } = default!;
+
+    public List<CreateOrderItemDto> OrderItems { get; set; } = [];
+
+    public string CouponCode { get; set; } = string.Empty;
+
+    public string? Notes { get; set; }
+
+    #endregion
 }

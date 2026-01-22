@@ -1,6 +1,13 @@
-﻿namespace Order.Domain.Repositories;
+﻿using Order.Domain.Entities;
 
-public class IInboxMessageRepository
+namespace Order.Domain.Repositories;
+
+public interface IInboxMessageRepository:IRepository<InboxMessageEntity>
 {
+
+    #region Methods
+
     
+    Task<InboxMessageEntity?> GetByMessageIdAsync(Guid messageId,CancellationToken cancellationToken = default);
+    #endregion
 }

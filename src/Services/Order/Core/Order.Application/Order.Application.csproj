@@ -13,12 +13,9 @@
     <ProjectReference Include="..\Order.Domain\Order.Domain.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Features\Order\Commands\" />
     <Folder Include="Features\Order\EventHandlers\" />
     <Folder Include="Features\Order\Queries\" />
-    <Folder Include="Mappings\" />
     <Folder Include="Models\Filters\" />
-    <Folder Include="Models\Results\" />
     <Folder Include="Services\" />
   </ItemGroup>
 </Project>

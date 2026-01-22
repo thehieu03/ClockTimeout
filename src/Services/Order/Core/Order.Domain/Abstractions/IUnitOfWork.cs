@@ -9,6 +9,8 @@ public interface IUnitOfWork
 
     IOrderRepository Orders { get; }
     IOrderItemRepository OrderItems { get; }
+    IInboxMessageRepository InboxMessages { get; }
+    IOutboxMessageRepository OutboxMessages { get; }
 
     #endregion
 

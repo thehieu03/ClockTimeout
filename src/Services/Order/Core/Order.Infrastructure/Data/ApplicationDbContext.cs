@@ -9,6 +9,8 @@ public class ApplicationDbContext:DbContext
 {
     public DbSet<OrderEntity> Orders => Set<OrderEntity>();
     public DbSet<OrderItemEntity> OrderItems => Set<OrderItemEntity>();
+    public DbSet<InboxMessageEntity> InboxMessages => Set<InboxMessageEntity>();
+    public DbSet<OutBoxMessageEntity> OutboxMessages => Set<OutBoxMessageEntity>();
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options):base(options)
     {
         

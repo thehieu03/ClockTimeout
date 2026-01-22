@@ -136,6 +136,8 @@ public sealed class MessageCode
 
     public const string QuantityIsRequired = "QUANTITY_IS_REQUIRED";
 
+    public const string QuantityMustBeGreaterThanZero = "QUANTITY_MUST_BE_GREATER_THAN_ZERO";
+
     public const string LocationIsRequired = "LOCATION_IS_REQUIRED";
 
     public const string InsufficientStock = "INSUFFICIENT_STOCK";

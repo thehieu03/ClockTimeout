@@ -23,6 +23,8 @@ public static class DependencyInjection
         // Register Repositories, Unit of Work, etc.
         services.AddScoped<IOrderRepository,OrderRepository>();
         services.AddScoped<IOrderItemRepository,OrderItemRepository>();
+        services.AddScoped<IInboxMessageRepository,InboxMessageRepository>();
+        services.AddScoped<IOutboxMessageRepository,OutboxMessageRepository>();
         services.AddScoped<IUnitOfWork,UnitOfWork.UnitOfWork>();
         return services;
     }
