@@ -64,6 +64,7 @@ services:
 
   sql-server:
     restart: unless-stopped
+    user: root
     ports:
       - "1434:1433"
     environment:
@@ -71,11 +72,10 @@ services:
       MSSQL_SA_PASSWORD: "SqlServer123!"
       MSSQL_COLLATION: "SQL_Latin1_General_CP1_CI_AS"
       MSSQL_PID: "Developer"
-      MSSQL_DUMP_DIR: "/var/opt/mssql/log"
       MSSQL_ENABLE_HADR_SUPPORT: "0"
-    command: /opt/mssql/bin/sqlservr --disable-dump
-    volumes:
-      - ./docker-volumes/sql-server:/var/opt/mssql
+    # command: /opt/mssql/bin/sqlservr --disable-dump
+    # volumes:
+    #   - ./docker-volumes/sql-server:/var/opt/mssql
     networks:
       - progcoder_network
     healthcheck:
@@ -130,8 +130,8 @@ services:
     mem_reservation: 256m
     cpus: "1.0"
     ports:
-      - "5001:80"    # HTTP port (mapped to 5001 for consistency)
-      - "5000:80"    # HTTP port (alternative mapping)
+      - "5001:80" # HTTP port (mapped to 5001 for consistency)
+      - "5000:80" # HTTP port (alternative mapping)
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://+:80
@@ -145,7 +145,11 @@ services:
       postgres-sql:
         condition: service_healthy
     healthcheck:
-      test: ["CMD-SHELL", "curl -f http://localhost:80/swagger/index.html || exit 1"]
+      test:
+        [
+          "CMD-SHELL",
+          "curl -f http://localhost:80/swagger/index.html || exit 1",
+        ]
       interval: 30s
       timeout: 10s
       retries: 3

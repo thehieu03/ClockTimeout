@@ -12,7 +12,7 @@ services:
     container_name: mysql
 
   sql-server:
-    image: mcr.microsoft.com/azure-sql-edge:latest
+    image: mcr.microsoft.com/mssql/server:2022-latest
     container_name: sql-server
 
   redis:

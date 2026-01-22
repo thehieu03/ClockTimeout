@@ -15,10 +15,10 @@ public static class DependencyInjection
 
     public static IServiceCollection AddInfrastructureServices(this IServiceCollection services,IConfiguration configuration)
     {
-        var connectionString=configuration.GetConnectionString("OrderDb");
+        var connectionString=configuration.GetConnectionString("Database");
         services.AddDbContext<ApplicationDbContext>(options =>
         {
-            options.UseNpgsql(connectionString);
+            options.UseSqlServer(connectionString);
         });
         // Register Repositories, Unit of Work, etc.
         services.AddScoped<IOrderRepository,OrderRepository>();
