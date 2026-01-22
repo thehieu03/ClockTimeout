@@ -1,0 +1,51 @@
+syntax = "proto3";
+
+option csharp_namespace = "Report.Grpc";
+
+package report;
+
+import "google/protobuf/timestamp.proto";
+
+// ==== Definition ====
+service ReportGrpc {
+	rpc PutDashboardTotal (PutDashboardTotalRequest) returns (PutDashboardTotalResponse);
+	rpc PutOrderGrowthLineChart (PutOrderGrowthLineChartRequest) returns (PutOrderGrowthLineChartResponse);
+	rpc PutTopProductPieChart (PutTopProductPieChartRequest) returns (PutTopProductPieChartResponse);
+}
+
+// ==== Messages ====
+message PutDashboardTotalRequest {
+	string title = 1;
+	string count = 2;
+}
+
+message PutDashboardTotalResponse {
+	bool success = 1;
+}
+
+message OrderGrowthLineChartItem {
+	int32 day = 1;
+	double value = 2;
+	google.protobuf.Timestamp date = 3;
+}
+
+message PutOrderGrowthLineChartRequest {
+	repeated OrderGrowthLineChartItem items = 1;
+}
+
+message PutOrderGrowthLineChartResponse {
+	bool success = 1;
+}
+
+message TopProductPieChartItem {
+	string name = 1;
+	double value = 2;
+}
+
+message PutTopProductPieChartRequest {
+	repeated TopProductPieChartItem items = 1;
+}
+
+message PutTopProductPieChartResponse {
+	bool success = 1;
+}

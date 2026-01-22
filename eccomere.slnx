@@ -26,6 +26,9 @@
     <Project Path="src/Services/Order/Core/Order.Domain/Order.Domain.csproj" />
     <Project Path="src/Services/Order/Core/Order.Infrastructure/Order.Infrastructure.csproj" />
   </Folder>
+  <Folder Name="/src/Services/Order/Test/">
+    <Project Path="src/Services/Order/Test/OrderUnitTest/OrderUnitTest.csproj" />
+  </Folder>
   <Folder Name="/src/Shared/">
     <Project Path="src/Shared/BuildingBlocks/BuildingBlocks.csproj" />
     <Project Path="src/Shared/Common/Common.csproj" />
@@ -35,5 +38,9 @@
   <Folder Name="/Solution Items/" />
   <Folder Name="/src/Shared/Contracts/">
     <Project Path="src/Shared/Contracts/Catalog.Contract/Catalog.Contract.csproj" />
+    <Project Path="src/Shared/Contracts/Discount.Contract/Discount.Contract.csproj" />
+    <Project Path="src/Shared/Contracts/Inventory.Contract/Inventory.Contract.csproj" />
+    <Project Path="src/Shared/Contracts/OrderContract/OrderContract.csproj" />
+    <Project Path="src/Shared/Contracts/Report.Contract/Report.Contract.csproj" />
   </Folder>
 </Solution>

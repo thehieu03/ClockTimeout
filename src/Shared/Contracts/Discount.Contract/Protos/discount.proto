@@ -1,0 +1,25 @@
+syntax = "proto3";
+option csharp_namespace = "Discount.Grpc";
+package discount;
+service DiscountGrpc{
+  rpc ApplyCoupon(ApplyCouponRequest) returns (ApplyCouponResponse);
+  rpc EvaluateCoupon(EvaluateCouponRequest) returns (EvaluateCouponResponse);
+}
+// Message
+message ApplyCouponRequest {
+  string code = 1;
+  double amount = 2;
+}
+message ApplyCouponResponse {
+  string coupon_code = 1;
+}
+message EvaluateCouponRequest {
+  string code = 1;
+  double amount = 2;
+}
+message EvaluateCouponResponse {
+  double original_amount = 1;
+  double discount_amount = 2;
+  double final_amount = 3;
+  string coupon_code = 4;
+}

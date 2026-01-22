@@ -1,0 +1,13 @@
+syntax = "proto3";
+option csharp_namespace = "Inventory.Grpc";
+package inventory;
+service InventoryGrpc{
+  rpc ExpireReservation(ExpireReservationRequest) returns (ExpireReservationResponse);
+}
+// Message
+message ExpireReservationRequest {
+  
+}
+message ExpireReservationResponse {
+  string success=1;
+}
