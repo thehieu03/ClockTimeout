@@ -1,4 +1,4 @@
-﻿using MediatR;
+using MediatR;
 using Microsoft.Extensions.Logging;
 using System.Diagnostics;
 
@@ -13,7 +13,7 @@ public sealed class LoggingBehavior<TRequest, TResponse>(ILogger<LoggingBehavior
             typeof(TRequest).Name, typeof(TResponse).Name, request);
         var timer = new Stopwatch();
         timer.Start();
-        var response=await next(cancellationToken);
+        var response=await next();
         timer.Stop();
         var timeTaken = timer.Elapsed;
         if (timeTaken.Seconds > 3)// if the request is getter than 3 seconds, thay log the warning

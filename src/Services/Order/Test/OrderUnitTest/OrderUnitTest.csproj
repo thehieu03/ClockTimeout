@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
     
     <PropertyGroup>
         <TargetFramework>net10.0</TargetFramework>
@@ -14,10 +14,26 @@
         <PackageReference Include="NUnit" />
         <PackageReference Include="NUnit.Analyzers" />
         <PackageReference Include="NUnit3TestAdapter" />
+        <PackageReference Include="Moq" />
+        <PackageReference Include="FluentAssertions" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore" />
+        <PackageReference Include="Microsoft.Extensions.Configuration" />
+        <PackageReference Include="Microsoft.Extensions.Configuration.Json" />
+        <PackageReference Include="Microsoft.Extensions.Configuration.Binder" />
+        <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" />
     </ItemGroup>
 
     <ItemGroup>
-        <Using Include="NUnit.Framework"/>
+        <Using Include="NUnit.Framework" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\..\Api\Order.Api\Order.Api.csproj" />
+      <ProjectReference Include="..\..\Core\Order.Application\Order.Application.csproj" />
+      <ProjectReference Include="..\..\Core\Order.Domain\Order.Domain.csproj" />
+      <ProjectReference Include="..\..\..\..\Shared\BuildingBlocks\BuildingBlocks.csproj" />
+      <ProjectReference Include="..\..\..\..\Shared\Common\Common.csproj" />
+      <ProjectReference Include="..\..\Core\Order.Infrastructure\Order.Infrastructure.csproj" />
     </ItemGroup>
 
 </Project>

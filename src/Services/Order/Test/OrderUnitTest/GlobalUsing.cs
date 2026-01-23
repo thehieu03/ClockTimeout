@@ -1,0 +1,16 @@
+﻿global using System.Net;
+global using System.Net.Http.Json;
+global using MediatR;
+global using Microsoft.AspNetCore.Mvc.Testing;
+global using Microsoft.AspNetCore.TestHost;
+global using Microsoft.Extensions.DependencyInjection;
+global using Moq;
+global using Order.Api;
+global using Order.Application.Dtos.Orders;
+global using Order.Application.Features.Order.Queries;
+global using FluentAssertions;
+global using Order.Application.Features.Order.Commands;
+global using Order.Domain.Abstractions;
+global using Order.Domain.Entities;
+global using Order.Domain.Repositories;
+global using Common.ValueObjects;

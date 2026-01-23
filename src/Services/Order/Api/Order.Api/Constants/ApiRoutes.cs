@@ -12,5 +12,6 @@ public sealed class ApiRoutes
         public const string GetOrderByOrderNo = $"{Base}/by-order-no/{{orderNo}}";
         public const string GetOrdersByCurrentUser = $"{Base}/me";
         public const string UpdateStatus = $"{BaseAdmin}/{{orderId}}/status";
+        public const string GetOrders = $"{Base}";
     }
 }

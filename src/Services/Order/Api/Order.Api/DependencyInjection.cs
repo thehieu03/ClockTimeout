@@ -1,6 +1,8 @@
 ﻿using Carter;
 using Order.Application;
 using Order.Infrastructure;
+using BuildingBlocks.Authentication.Extensions;
+using BuildingBlocks.Extensions.Handler;
 
 namespace Order.Api;
 
@@ -15,6 +17,13 @@ public static class DependencyInjection
         services.AddApplicationServices();
         // Register Infrastructure Services
         services.AddInfrastructureServices(cfg);
+        // Register Authentication and Authorization
+        services.AddAuthenticationAndAuthorization(cfg);
+        // Register HttpContextAccessor
+        services.AddHttpContextAccessor();
+        // Register Exception Handler
+        services.AddExceptionHandler<CustomExceptionHandler>();
+        services.AddProblemDetails();
         // Register Carter
         services.AddCarter();
         return services;
@@ -22,6 +31,9 @@ public static class DependencyInjection
     public static WebApplication UseApi(this WebApplication app)
     {
         app.MapCarter();
+        app.UseExceptionHandler(options => { });
+        app.UseAuthentication();
+        app.UseAuthorization();
         return app;
     }
     #endregion

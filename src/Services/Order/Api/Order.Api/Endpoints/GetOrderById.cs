@@ -1,4 +1,5 @@
 using Carter;
+using Microsoft.AspNetCore.Mvc;
 using MediatR;
 using Order.Api.Constants;
 using Order.Application.Dtos.Orders;
@@ -17,12 +18,12 @@ public sealed class GetOrderById : ICarterModule
             .Produces(StatusCodes.Status401Unauthorized)
             .Produces(StatusCodes.Status403Forbidden)
             .ProducesProblem(StatusCodes.Status404NotFound)
-            .RequireAuthorization();
+            .RequireAuthorization();// Admin or Owner policy
     }
 
     private async Task<IResult> HandleGetOrderByIdAsync(
-        ISender sender,
-        Guid orderId)
+        [FromServices] ISender sender,
+        [FromRoute] Guid orderId)
     {
         var query = new GetOrderByIdQuery(orderId);
 

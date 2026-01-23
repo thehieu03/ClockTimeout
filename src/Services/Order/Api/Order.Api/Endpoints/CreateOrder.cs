@@ -23,10 +23,13 @@ public sealed class CreateOrder:ICarterModule
             .Produces(StatusCodes.Status403Forbidden)
             .ProducesProblem(StatusCodes.Status400BadRequest);
     }
-    private async Task<ApiCreatedResponse<Guid>> HandleCreateOrderAsync(ISender sender,HttpContextAccessor httpContext,[FromBody]CreateOrUpdateOrderDto dto)
+    private async Task<ApiCreatedResponse<Guid>> HandleCreateOrderAsync(
+        [FromServices] ISender sender,
+        [FromServices] IHttpContextAccessor httpContextAccessor,
+        [FromBody] CreateOrUpdateOrderDto dto)
     {
         // Get current user
-        var currentUser = httpContext.GetCurrentUser();
+        var currentUser = httpContextAccessor.GetCurrentUser();
         var actor = Actor.User(currentUser.Email);
         // create command
         var command = new CreateOrderCommand(dto, actor);
