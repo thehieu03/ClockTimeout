@@ -1,4 +1,4 @@
-﻿namespace Order.Application.Models.Externals;
+﻿namespace Order.Application.Models.Response.Externals;
 
 public class ProductResponse
 {

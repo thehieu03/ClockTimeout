@@ -16,6 +16,5 @@
     <Folder Include="Features\Order\EventHandlers\" />
     <Folder Include="Features\Order\Queries\" />
     <Folder Include="Models\Filters\" />
-    <Folder Include="Services\" />
   </ItemGroup>
 </Project>
