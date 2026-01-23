@@ -7,40 +7,53 @@
   <Folder Name="/src/Services/" />
   <Folder Name="/src/Services/Catalog/" />
   <Folder Name="/src/Services/Catalog/Api/">
-    <Project Path="src/Services/Catalog/Api/Catalog.Api/Catalog.Api.csproj" />
+    <Project Path="D:/C#/ClockTimeout/src/Services/Catalog/Api/Catalog.Api/Catalog.Api.csproj" />
   </Folder>
   <Folder Name="/src/Services/Catalog/Core/">
-    <Project Path="src/Services/Catalog/Core/Catalog.Application/Catalog.Application.csproj" Id="0de6a9b3-f26c-4aae-95c1-0bca8e62ba7d" />
-    <Project Path="src/Services/Catalog/Core/Catalog.Domain/Catalog.Domain.csproj" />
-    <Project Path="src/Services/Catalog/Core/Catalog.Infrastructure/Catalog.Infrastructure.csproj" Id="b8936d17-6bd9-497d-ac6c-9e905018bb10" />
+    <Project Path="D:/C#/ClockTimeout/src/Services/Catalog/Core/Catalog.Application/Catalog.Application.csproj" Id="0de6a9b3-f26c-4aae-95c1-0bca8e62ba7d" />
+    <Project Path="D:/C#/ClockTimeout/src/Services/Catalog/Core/Catalog.Domain/Catalog.Domain.csproj" />
+    <Project Path="D:/C#/ClockTimeout/src/Services/Catalog/Core/Catalog.Infrastructure/Catalog.Infrastructure.csproj" Id="b8936d17-6bd9-497d-ac6c-9e905018bb10" />
   </Folder>
   <Folder Name="/src/Services/Catalog/Test/">
-    <Project Path="src/Services/Catalog/Test/TestProject1/TestProject1.csproj" />
+    <Project Path="D:/C#/ClockTimeout/src/Services/Catalog/Test/TestProject1/TestProject1.csproj" />
   </Folder>
   <Folder Name="/src/Services/Order/" />
   <Folder Name="/src/Services/Order/Api/">
-    <Project Path="src/Services/Order/Api/Order.Api/Order.Api.csproj" />
+    <Project Path="D:/C#/ClockTimeout/src/Services/Order/Api/Order.Api/Order.Api.csproj" />
   </Folder>
   <Folder Name="/src/Services/Order/Core/">
-    <Project Path="src/Services/Order/Core/Order.Application/Order.Application.csproj" />
-    <Project Path="src/Services/Order/Core/Order.Domain/Order.Domain.csproj" />
-    <Project Path="src/Services/Order/Core/Order.Infrastructure/Order.Infrastructure.csproj" />
+    <Project Path="D:/C#/ClockTimeout/src/Services/Order/Core/Order.Application/Order.Application.csproj" />
+    <Project Path="D:/C#/ClockTimeout/src/Services/Order/Core/Order.Domain/Order.Domain.csproj" />
+    <Project Path="D:/C#/ClockTimeout/src/Services/Order/Core/Order.Infrastructure/Order.Infrastructure.csproj" />
   </Folder>
   <Folder Name="/src/Services/Order/Test/">
-    <Project Path="src/Services/Order/Test/OrderUnitTest/OrderUnitTest.csproj" />
+    <Project Path="D:/C#/ClockTimeout/src/Services/Order/Test/OrderUnitTest/OrderUnitTest.csproj" />
+  </Folder>
+  <Folder Name="/src/Services/Payment/" />
+  <Folder Name="/src/Services/Payment/Api/">
+    <Project Path="D:/C#/ClockTimeout/src/Services/Payment/Api/Payment.Api/Payment.Api.csproj" />
+  </Folder>
+  <Folder Name="/src/Services/Payment/Core/">
+    <Project Path="D:/C#/ClockTimeout/src/Services/Payment/Core/Payment.Application/Payment.Application.csproj" />
+    <Project Path="D:/C#/ClockTimeout/src/Services/Payment/Core/Payment.Domain/Payment.Domain.csproj" />
+    <Project Path="D:/C#/ClockTimeout/src/Services/Payment/Core/Payment.Infrastructure/Payment.Infrastructure.csproj" />
+  </Folder>
+  <Folder Name="/src/Services/Payment/Test/">
+    <Project Path="D:/C#/ClockTimeout/src/Services/Payment/Test/PaymentUnitTest/PaymentUnitTest.csproj" />
   </Folder>
   <Folder Name="/src/Shared/">
-    <Project Path="src/Shared/BuildingBlocks/BuildingBlocks.csproj" />
-    <Project Path="src/Shared/Common/Common.csproj" />
+    <Project Path="D:/C#/ClockTimeout/Shared/EventSourcing/EventSourcing.csproj" Id="1f3f22ef-2ef0-4de3-9c51-d1f68354e9f0" />
+    <Project Path="D:/C#/ClockTimeout/src/Shared/BuildingBlocks/BuildingBlocks.csproj" />
+    <Project Path="D:/C#/ClockTimeout/src/Shared/Common/Common.csproj" />
   </Folder>
   
   <!-- Solution Items -->
   <Folder Name="/Solution Items/" />
   <Folder Name="/src/Shared/Contracts/">
-    <Project Path="src/Shared/Contracts/Catalog.Contract/Catalog.Contract.csproj" />
-    <Project Path="src/Shared/Contracts/Discount.Contract/Discount.Contract.csproj" />
-    <Project Path="src/Shared/Contracts/Inventory.Contract/Inventory.Contract.csproj" />
-    <Project Path="src/Shared/Contracts/OrderContract/OrderContract.csproj" />
-    <Project Path="src/Shared/Contracts/Report.Contract/Report.Contract.csproj" />
+    <Project Path="D:/C#/ClockTimeout/src/Shared/Contracts/Catalog.Contract/Catalog.Contract.csproj" />
+    <Project Path="D:/C#/ClockTimeout/src/Shared/Contracts/Discount.Contract/Discount.Contract.csproj" />
+    <Project Path="D:/C#/ClockTimeout/src/Shared/Contracts/Inventory.Contract/Inventory.Contract.csproj" />
+    <Project Path="D:/C#/ClockTimeout/src/Shared/Contracts/OrderContract/OrderContract.csproj" />
+    <Project Path="D:/C#/ClockTimeout/src/Shared/Contracts/Report.Contract/Report.Contract.csproj" />
   </Folder>
 </Solution>

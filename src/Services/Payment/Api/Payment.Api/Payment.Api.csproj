@@ -17,8 +17,7 @@
       <Folder Include="Middleware\" />
     </ItemGroup>
     <ItemGroup>
-      <ProjectReference Include="..\..\Core\Order.Application\Order.Application.csproj" />
-      <ProjectReference Include="..\..\Core\Order.Infrastructure\Order.Infrastructure.csproj" />
+      <ProjectReference Include="..\..\Core\Payment.Application\Payment.Application.csproj" />
+      <ProjectReference Include="..\..\Core\Payment.Infrastructure\Payment.Infrastructure.csproj" />
     </ItemGroup>
-
 </Project>

@@ -300,5 +300,7 @@ public sealed class MessageCode
 
     public const string InventoryItemNotFound = "INVENTORY_ITEM_NOT_FOUND";
 
+    public const string ErrorMessageIsRequired = "ERROR_MESSAGE_IS_REQUIRED";
+
     #endregion
 }

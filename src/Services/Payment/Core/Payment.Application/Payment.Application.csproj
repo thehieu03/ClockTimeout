@@ -10,10 +10,6 @@
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\Shared\BuildingBlocks\BuildingBlocks.csproj" />
     <ProjectReference Include="..\..\..\..\Shared\Common\Common.csproj" />
-    <ProjectReference Include="..\Order.Domain\Order.Domain.csproj" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Features\Order\Queries\" />
-    <Folder Include="Models\Filters\" />
+    <ProjectReference Include="..\Payment.Domain\Payment.Domain.csproj" />
   </ItemGroup>
 </Project>

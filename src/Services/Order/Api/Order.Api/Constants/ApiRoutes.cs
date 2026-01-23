@@ -14,5 +14,6 @@ public sealed class ApiRoutes
         public const string UpdateStatus = $"{BaseAdmin}/{{orderId}}/status";
         public const string Update = $"{BaseAdmin}/{{orderId}}";
         public const string GetOrders = $"{Base}";
+        public const string UpdateOrderStatus = $"{BaseAdmin}/{{orderId}}/status";
     }
 }

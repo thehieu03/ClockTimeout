@@ -1,0 +1,17 @@
+global using System.Net;
+global using System.Net.Http.Json;
+global using MediatR;
+global using Microsoft.AspNetCore.Mvc.Testing;
+global using Microsoft.AspNetCore.TestHost;
+global using Microsoft.Extensions.DependencyInjection;
+global using Moq;
+global using FluentAssertions;
+global using NUnit.Framework;
+global using Payment.Api;
+global using Payment.Application.Dtos;
+global using Payment.Application.Features.Payment.Commands;
+global using Payment.Application.Features.Payment.Queries;
+global using Payment.Domain.Abstractions;
+global using Payment.Domain.Entities;
+global using Payment.Domain.Enums;
+global using Payment.Domain.Repositories;
