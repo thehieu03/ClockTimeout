@@ -20,7 +20,7 @@ public sealed class ProcessPayment : ICarterModule
             .Produces(StatusCodes.Status401Unauthorized)
             .ProducesProblem(StatusCodes.Status400BadRequest)
             .ProducesProblem(StatusCodes.Status404NotFound)
-            .WithDescription("Process a pending payment through the payment gateway")
+            .WithDescription(EndpointDescriptions.Payment.Process)
             .RequireAuthorization();
     }
 

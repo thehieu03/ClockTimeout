@@ -217,4 +217,51 @@ public class PaymentEntityTests
         act.Should().Throw<InvalidOperationException>()
             .WithMessage("Only pending payments can be cancelled.");
     }
+
+    [Test]
+    public void SetTransactionId_WhenProcessing_ShouldSetTransactionId()
+    {
+        // Arrange
+        var payment = PaymentEntity.Create(Guid.NewGuid(), 100m, PaymentMethod.VnPay);
+        payment.MarkAsProcessing();
+        var transactionId = "VNPAY-TXN-123";
+
+        // Act
+        payment.SetTransactionId(transactionId);
+
+        // Assert
+        payment.TransactionId.Should().Be(transactionId);
+        payment.Status.Should().Be(PaymentStatus.Processing);
+    }
+
+    [Test]
+    public void SetTransactionId_WhenNotProcessing_ShouldThrowInvalidOperationException()
+    {
+        // Arrange
+        var payment = PaymentEntity.Create(Guid.NewGuid(), 100m, PaymentMethod.VnPay);
+        // Payment is in Pending status
+
+        // Act
+        var act = () => payment.SetTransactionId("TXN-123");
+
+        // Assert
+        act.Should().Throw<InvalidOperationException>()
+            .WithMessage("Cannot set transaction ID for payment in Pending status");
+    }
+
+    [Test]
+    public void SetTransactionId_WithModifiedBy_ShouldSetLastModifiedBy()
+    {
+        // Arrange
+        var payment = PaymentEntity.Create(Guid.NewGuid(), 100m, PaymentMethod.VnPay);
+        payment.MarkAsProcessing();
+        var modifiedBy = "system@vnpay.com";
+
+        // Act
+        payment.SetTransactionId("VNPAY-TXN-456", modifiedBy);
+
+        // Assert
+        payment.LastModifiedBy.Should().Be(modifiedBy);
+        payment.LastModifiedOnUtc.Should().NotBeNull();
+    }
 }

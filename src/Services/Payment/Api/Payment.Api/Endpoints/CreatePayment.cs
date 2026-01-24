@@ -20,7 +20,7 @@ public sealed class CreatePayment : ICarterModule
             .Produces<ApiCreatedResponse<PaymentDto>>(StatusCodes.Status201Created)
             .Produces(StatusCodes.Status401Unauthorized)
             .ProducesProblem(StatusCodes.Status400BadRequest)
-            .WithDescription("Create a new payment for an order")
+            .WithDescription(EndpointDescriptions.Payment.Create)
             .RequireAuthorization();
     }
 

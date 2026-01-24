@@ -20,6 +20,11 @@ public class PaymentRepository(ApplicationDbContext context) : IPaymentRepositor
         return await _dbSet.FirstOrDefaultAsync(x => x.OrderId == orderId, cancellationToken);
     }
 
+    public async Task<PaymentEntity?> GetByTransactionIdAsync(string transactionId, CancellationToken cancellationToken = default)
+    {
+        return await _dbSet.FirstOrDefaultAsync(x => x.TransactionId == transactionId, cancellationToken);
+    }
+
     public async Task<IReadOnlyList<PaymentEntity>> GetAllAsync(CancellationToken cancellationToken = default)
     {
         return await _dbSet.OrderByDescending(x => x.CreatedOnUtc).ToListAsync(cancellationToken);

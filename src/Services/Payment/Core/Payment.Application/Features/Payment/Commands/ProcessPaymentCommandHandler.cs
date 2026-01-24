@@ -80,12 +80,31 @@ public class ProcessPaymentCommandHandler(
             // 7. Handle result
             if (gatewayResult.IsSuccess)
             {
-                payment.Complete(gatewayResult.TransactionId!, gatewayResult.RawResponse, command.Actor.Value);
+                // Check if this is a redirect-based payment (VnPay, Momo, etc.)
+                // If there's a redirect URL, keep the payment in Processing status
+                // The payment will be completed via callback (IPN/Callback endpoint)
+                if (!string.IsNullOrEmpty(gatewayResult.RedirectUrl))
+                {
+                    // Store the transaction ID for later callback verification
+                    payment.SetTransactionId(gatewayResult.TransactionId!);
+                    
+                    logger.LogInformation(
+                        "Payment {PaymentId} requires redirect. TransactionId: {TransactionId}, RedirectUrl: {RedirectUrl}",
+                        payment.Id,
+                        gatewayResult.TransactionId,
+                        gatewayResult.RedirectUrl);
+                }
+                else
+                {
+                    // Non-redirect payment (e.g., COD, direct card charge)
+                    // Complete the payment immediately
+                    payment.Complete(gatewayResult.TransactionId!, gatewayResult.RawResponse, command.Actor.Value);
 
-                logger.LogInformation(
-                    "Payment {PaymentId} completed successfully. TransactionId: {TransactionId}",
-                    payment.Id,
-                    gatewayResult.TransactionId);
+                    logger.LogInformation(
+                        "Payment {PaymentId} completed successfully. TransactionId: {TransactionId}",
+                        payment.Id,
+                        gatewayResult.TransactionId);
+                }
             }
             else
             {

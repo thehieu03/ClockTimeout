@@ -17,5 +17,8 @@ public static class ApiRoutes
         public const string Fail = $"{BaseAdmin}/{{paymentId}}/fail";
         public const string Refund = $"{BaseAdmin}/{{paymentId}}/refund";
         public const string Process = $"{BaseAdmin}/{{paymentId}}/process";
+
+        public const string VnPayCallback = $"{Base}/vnpay-callback";
+        public const string VnPayIpn = $"{Base}/vnpay-ipn";
     }
 }

@@ -5,6 +5,7 @@ namespace Payment.Application.Gateways;
 
 public interface IPaymentGateway
 {
+    
     PaymentMethod SupportedMethod { get; }
 
     Task<PaymentGatewayResult> ProcessPaymentAsync(

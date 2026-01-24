@@ -47,6 +47,16 @@ public sealed class PaymentEntity : Aggregate<Guid>
         LastModifiedBy = modifiedBy;
     }
 
+    public void SetTransactionId(string transactionId, string? modifiedBy = null)
+    {
+        if (Status != PaymentStatus.Processing)
+            throw new InvalidOperationException($"Cannot set transaction ID for payment in {Status} status");
+
+        TransactionId = transactionId;
+        LastModifiedOnUtc = DateTimeOffset.UtcNow;
+        LastModifiedBy = modifiedBy;
+    }
+
     public void Complete(string transactionId, string? gatewayResponse = null, string? modifiedBy = null)
     {
         if (Status != PaymentStatus.Processing && Status != PaymentStatus.Pending)
