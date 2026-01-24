@@ -16,5 +16,6 @@ public static class ApiRoutes
         public const string Complete = $"{BaseAdmin}/{{paymentId}}/complete";
         public const string Fail = $"{BaseAdmin}/{{paymentId}}/fail";
         public const string Refund = $"{BaseAdmin}/{{paymentId}}/refund";
+        public const string Process = $"{BaseAdmin}/{{paymentId}}/process";
     }
 }

@@ -24,7 +24,7 @@ public sealed class FailPayment : ICarterModule
         [FromRoute] Guid paymentId,
         [FromBody] FailPaymentDto dto)
     {
-        var command = new FailPaymentCommand(paymentId, dto.ErrorMessage);
+        var command = new FailPaymentCommand(paymentId, dto.ErrorCode, dto.ErrorMessage);
         await sender.Send(command);
         return Results.NoContent();
     }

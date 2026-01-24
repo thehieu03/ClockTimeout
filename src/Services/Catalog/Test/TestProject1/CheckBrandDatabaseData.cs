@@ -6,6 +6,9 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace TestProject1;
 
 [TestClass]
+[TestCategory("Integration")]
+[TestCategory("RequiresDatabase")]
+[Ignore("This test requires a running PostgreSQL database at localhost:5433")]
 public sealed class CheckBrandDatabaseData
 {
     [TestMethod]

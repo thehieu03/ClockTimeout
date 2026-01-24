@@ -6,7 +6,11 @@ using Payment.Domain.Abstractions;
 
 namespace Payment.Application.Features.Payment.Commands;
 
-public record FailPaymentCommand(Guid PaymentId, string ErrorMessage, string? PerformedBy = null) : ICommand;
+public record FailPaymentCommand(
+    Guid PaymentId,
+    string ErrorCode,
+    string ErrorMessage,
+    string? PerformedBy = null) : ICommand;
 
 public class FailPaymentCommandValidator : AbstractValidator<FailPaymentCommand>
 {
@@ -15,6 +19,12 @@ public class FailPaymentCommandValidator : AbstractValidator<FailPaymentCommand>
         RuleFor(x => x.PaymentId)
             .NotEmpty()
             .WithMessage(MessageCode.IdIsRequired);
+
+        RuleFor(x => x.ErrorCode)
+            .NotEmpty()
+            .WithMessage("ERROR_CODE_IS_REQUIRED")
+            .MaximumLength(100)
+            .WithMessage(MessageCode.Max100Characters);
 
         RuleFor(x => x.ErrorMessage)
             .NotEmpty()
@@ -33,7 +43,7 @@ public class FailPaymentCommandHandler(IUnitOfWork unitOfWork) : ICommandHandler
         if (payment is null)
             throw new NotFoundException(MessageCode.NotFound, command.PaymentId);
 
-        payment.MarkAsFailed(command.ErrorMessage, command.PerformedBy);
+        payment.MarkAsFailed(command.ErrorCode, command.ErrorMessage, null, command.PerformedBy);
 
         unitOfWork.Payments.Update(payment);
         await unitOfWork.SaveChangesAsync(cancellationToken);

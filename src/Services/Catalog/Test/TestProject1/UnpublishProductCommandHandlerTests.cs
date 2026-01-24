@@ -141,8 +141,12 @@ public sealed class UnpublishProductCommandHandlerTests
             .Returns(Task.CompletedTask);
 
         DeletedUnPublishedProductDomainEvent? publishedEvent = null;
-        _mockMediator.Setup(x => x.Publish(It.IsAny<DeletedUnPublishedProductDomainEvent>(), It.IsAny<CancellationToken>()))
-            .Callback<DeletedUnPublishedProductDomainEvent, CancellationToken>((e, ct) => publishedEvent = e)
+        _mockMediator.Setup(x => x.Publish(It.IsAny<object>(), It.IsAny<CancellationToken>()))
+            .Callback<object, CancellationToken>((e, ct) =>
+            {
+                if (e is DeletedUnPublishedProductDomainEvent domainEvent)
+                    publishedEvent = domainEvent;
+            })
             .Returns(Task.CompletedTask);
 
         // Act

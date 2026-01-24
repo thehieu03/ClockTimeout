@@ -52,7 +52,7 @@ public class PaymentMappingProfileTests
     {
         // Arrange
         var payment = PaymentEntity.Create(Guid.NewGuid(), 100m, PaymentMethod.Stipe);
-        payment.Complete("TXN-123456", "admin@example.com");
+        payment.Complete("TXN-123456", null, "admin@example.com");
 
         // Act
         var dto = _mapper.Map<PaymentDto>(payment);
@@ -69,7 +69,7 @@ public class PaymentMappingProfileTests
     {
         // Arrange
         var payment = PaymentEntity.Create(Guid.NewGuid(), 100m, PaymentMethod.Momo);
-        payment.MarkAsFailed("Insufficient funds");
+        payment.MarkAsFailed("INSUFFICIENT_FUNDS", "Insufficient funds");
 
         // Act
         var dto = _mapper.Map<PaymentDto>(payment);

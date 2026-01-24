@@ -45,19 +45,27 @@ public class CreatePaymentEndpointTests
             Method = PaymentMethod.VnPay
         };
         var paymentId = Guid.NewGuid();
+        var paymentDto = new PaymentDto
+        {
+            Id = paymentId,
+            OrderId = dto.OrderId,
+            Amount = dto.Amount,
+            Method = dto.Method,
+            Status = PaymentStatus.Pending
+        };
 
         _mockSender
             .Setup(s => s.Send(It.IsAny<CreatePaymentCommand>(), It.IsAny<CancellationToken>()))
-            .ReturnsAsync(paymentId);
+            .ReturnsAsync(paymentDto);
 
         // Act
         var response = await _client.PostAsJsonAsync("/admin/payments", dto);
 
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.Created);
-        var result = await response.Content.ReadFromJsonAsync<ApiCreatedResponse<Guid>>();
+        var result = await response.Content.ReadFromJsonAsync<ApiCreatedResponse<PaymentDto>>();
         result.Should().NotBeNull();
-        result!.Value.Should().Be(paymentId);
+        result!.Value.Id.Should().Be(paymentId);
     }
 
     private class AllowAnonymousHandler : IAuthorizationHandler

@@ -1,24 +1,30 @@
 using Microsoft.AspNetCore.Authorization;
+using Order.Application.Services;
 
 namespace OrderUnitTest.Features.Order.Queries;
 
 [TestFixture]
 public class GetOrderByIdEndpointTests
 {
-    private WebApplicationFactory<Program> _factory;
-    private Mock<ISender> _mockSender;
-    private HttpClient _client;
+    private WebApplicationFactory<Program> _factory = null!;
+    private Mock<ISender> _mockSender = null!;
+    private HttpClient _client = null!;
 
     [SetUp]
     public void Setup()
     {
         _mockSender = new Mock<ISender>();
+        var mockCatalogGrpcService = new Mock<ICatalogGrpcService>();
+        var mockDiscountGrpcService = new Mock<IDiscountGrpcService>();
+
         _factory = new WebApplicationFactory<Program>()
             .WithWebHostBuilder(builder =>
             {
                 builder.ConfigureTestServices(services =>
                 {
                     services.AddSingleton(_mockSender.Object);
+                    services.AddSingleton(mockCatalogGrpcService.Object);
+                    services.AddSingleton(mockDiscountGrpcService.Object);
                     // Bypass Authorization
                     services.AddSingleton<IAuthorizationHandler, AllowAnonymousHandler>();
                 });
@@ -29,8 +35,8 @@ public class GetOrderByIdEndpointTests
     [TearDown]
     public void TearDown()
     {
-        _client.Dispose();
-        _factory.Dispose();
+        _client?.Dispose();
+        _factory?.Dispose();
     }
 
     [Test]
@@ -38,9 +44,9 @@ public class GetOrderByIdEndpointTests
     {
         // Arrange
         var orderId = Guid.NewGuid();
-        var orderDto = new OrderDto 
-        { 
-            Id = orderId, 
+        var orderDto = new OrderDto
+        {
+            Id = orderId,
             OrderNo = "ORD-123",
             Customer = new CustomerDto { Name = "Test Customer" }
         };
@@ -55,7 +61,7 @@ public class GetOrderByIdEndpointTests
         response.StatusCode.Should().Be(HttpStatusCode.OK);
         var result = await response.Content.ReadFromJsonAsync<OrderDto>();
         result.Should().NotBeNull();
-        result.Id.Should().Be(orderId);
+        result!.Id.Should().Be(orderId);
         result.OrderNo.Should().Be("ORD-123");
     }
 
@@ -64,7 +70,7 @@ public class GetOrderByIdEndpointTests
     {
         // Arrange
         var orderId = Guid.NewGuid();
-        
+
         _mockSender.Setup(s => s.Send(It.IsAny<GetOrderByIdQuery>(), It.IsAny<CancellationToken>()))
             .ThrowsAsync(new BuildingBlocks.Extensions.NotFoundException(Common.Constants.MessageCode.OrderNotFound, orderId));
 

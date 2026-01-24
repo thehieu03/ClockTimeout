@@ -112,6 +112,8 @@ public sealed class MessageCode
 
     public const string PriceMustBeGreaterThanZero = "PRICE_MUST_BE_GREATER_THAN_ZERO";
 
+    public const string AmountMustBeGreaterThanZero = "AMOUNT_MUST_BE_GREATER_THAN_ZERO";
+
     public const string SalePriceMustBeGreaterThanZero = "SALE_PRICE_MUST_BE_GREATER_THAN_ZERO";
 
     public const string ActorIsRequired = "ACTOR_IS_REQUIRED";
@@ -131,6 +133,22 @@ public sealed class MessageCode
     public const string ProductIsNotExists = "PRODUCT_IS_NOT_EXISTS";
 
     public const string StatusIsInvalid = "STATUS_IS_INVALID";
+
+    public const string PaymentMethodInvalid = "PAYMENT_METHOD_INVALID";
+
+    public const string PaymentNotFound = "PAYMENT_NOT_FOUND";
+
+    public const string PaymentIdIsRequired = "PAYMENT_ID_IS_REQUIRED";
+
+    public const string PaymentAlreadyCompleted = "PAYMENT_ALREADY_COMPLETED";
+
+    public const string PaymentAlreadyFailed = "PAYMENT_ALREADY_FAILED";
+
+    public const string PaymentMethodNotSupported = "PAYMENT_METHOD_NOT_SUPPORTED";
+
+    public const string PaymentProcessingFailed = "PAYMENT_PROCESSING_FAILED";
+
+    public const string PaymentAlreadyProcessed = "PAYMENT_ALREADY_PROCESSED";
 
     public const string QuantityCannotBeNegative = "QUANTITY_CANNOT_BE_NEGATIVE";
 
@@ -301,6 +319,8 @@ public sealed class MessageCode
     public const string InventoryItemNotFound = "INVENTORY_ITEM_NOT_FOUND";
 
     public const string ErrorMessageIsRequired = "ERROR_MESSAGE_IS_REQUIRED";
+
+    public const string TransactionIdIsRequired = "TRANSACTION_ID_IS_REQUIRED";
 
     #endregion
 }

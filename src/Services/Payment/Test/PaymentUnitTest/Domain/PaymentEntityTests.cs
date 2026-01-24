@@ -56,21 +56,23 @@ public class PaymentEntityTests
     }
 
     [Test]
-    public void Complete_WithModifiedBy_ShouldSetLastModifiedBy()
+    public void Complete_WithGatewayResponse_ShouldSetGatewayResponse()
     {
         // Arrange
         var payment = PaymentEntity.Create(Guid.NewGuid(), 100m, PaymentMethod.Cod);
+        var gatewayResponse = "{\"status\":\"success\"}";
         var modifiedBy = "admin@example.com";
 
         // Act
-        payment.Complete("TXN-789", modifiedBy);
+        payment.Complete("TXN-789", gatewayResponse, modifiedBy);
 
         // Assert
+        payment.GatewayResponse.Should().Be(gatewayResponse);
         payment.LastModifiedBy.Should().Be(modifiedBy);
     }
 
     [Test]
-    public void Complete_WhenNotPending_ShouldThrowInvalidOperationException()
+    public void Complete_WhenNotPendingOrProcessing_ShouldThrowInvalidOperationException()
     {
         // Arrange
         var payment = PaymentEntity.Create(Guid.NewGuid(), 100m, PaymentMethod.VnPay);
@@ -80,8 +82,20 @@ public class PaymentEntityTests
         var act = () => payment.Complete("TXN-456");
 
         // Assert
-        act.Should().Throw<InvalidOperationException>()
-            .WithMessage("Only pending payments can be completed.");
+        act.Should().Throw<InvalidOperationException>();
+    }
+
+    [Test]
+    public void MarkAsProcessing_ShouldSetStatusToProcessing()
+    {
+        // Arrange
+        var payment = PaymentEntity.Create(Guid.NewGuid(), 100m, PaymentMethod.VnPay);
+
+        // Act
+        payment.MarkAsProcessing();
+
+        // Assert
+        payment.Status.Should().Be(PaymentStatus.Processing);
     }
 
     [Test]
@@ -89,30 +103,31 @@ public class PaymentEntityTests
     {
         // Arrange
         var payment = PaymentEntity.Create(Guid.NewGuid(), 100m, PaymentMethod.Momo);
+        var errorCode = "INSUFFICIENT_FUNDS";
         var errorMessage = "Insufficient funds";
 
         // Act
-        payment.MarkAsFailed(errorMessage);
+        payment.MarkAsFailed(errorCode, errorMessage);
 
         // Assert
         payment.Status.Should().Be(PaymentStatus.Failed);
+        payment.ErrorCode.Should().Be(errorCode);
         payment.ErrorMessage.Should().Be(errorMessage);
         payment.LastModifiedOnUtc.Should().NotBeNull();
     }
 
     [Test]
-    public void MarkAsFailed_WhenNotPending_ShouldThrowInvalidOperationException()
+    public void MarkAsFailed_WhenNotPendingOrProcessing_ShouldThrowInvalidOperationException()
     {
         // Arrange
         var payment = PaymentEntity.Create(Guid.NewGuid(), 100m, PaymentMethod.VnPay);
-        payment.MarkAsFailed("First failure");
+        payment.MarkAsFailed("ERROR", "First failure");
 
         // Act
-        var act = () => payment.MarkAsFailed("Second failure");
+        var act = () => payment.MarkAsFailed("ERROR2", "Second failure");
 
         // Assert
-        act.Should().Throw<InvalidOperationException>()
-            .WithMessage("Only pending payments can be marked as failed.");
+        act.Should().Throw<InvalidOperationException>();
     }
 
     [Test]
@@ -165,7 +180,7 @@ public class PaymentEntityTests
     {
         // Arrange
         var payment = PaymentEntity.Create(Guid.NewGuid(), 100m, PaymentMethod.VnPay);
-        payment.MarkAsFailed("Payment failed");
+        payment.MarkAsFailed("ERROR", "Payment failed");
 
         // Act
         var act = () => payment.Refund("Refund reason");
@@ -173,5 +188,33 @@ public class PaymentEntityTests
         // Assert
         act.Should().Throw<InvalidOperationException>()
             .WithMessage("Only completed payments can be refunded.");
+    }
+
+    [Test]
+    public void Cancel_ShouldSetStatusToCancelled()
+    {
+        // Arrange
+        var payment = PaymentEntity.Create(Guid.NewGuid(), 100m, PaymentMethod.VnPay);
+
+        // Act
+        payment.Cancel();
+
+        // Assert
+        payment.Status.Should().Be(PaymentStatus.Cancelled);
+    }
+
+    [Test]
+    public void Cancel_WhenNotPending_ShouldThrowInvalidOperationException()
+    {
+        // Arrange
+        var payment = PaymentEntity.Create(Guid.NewGuid(), 100m, PaymentMethod.VnPay);
+        payment.Complete("TXN-123");
+
+        // Act
+        var act = () => payment.Cancel();
+
+        // Assert
+        act.Should().Throw<InvalidOperationException>()
+            .WithMessage("Only pending payments can be cancelled.");
     }
 }

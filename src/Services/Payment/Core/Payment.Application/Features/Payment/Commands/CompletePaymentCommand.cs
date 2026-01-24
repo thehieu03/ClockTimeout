@@ -18,7 +18,7 @@ public class CompletePaymentCommandValidator : AbstractValidator<CompletePayment
 
         RuleFor(x => x.TransactionId)
             .NotEmpty()
-            .WithMessage("TRANSACTION_ID_IS_REQUIRED");
+            .WithMessage(MessageCode.TransactionIdIsRequired);
     }
 }
 

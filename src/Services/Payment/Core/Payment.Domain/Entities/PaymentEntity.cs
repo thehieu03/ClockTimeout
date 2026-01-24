@@ -11,9 +11,12 @@ public sealed class PaymentEntity : Aggregate<Guid>
     public decimal Amount { get; private set; }
     public PaymentStatus Status { get; private set; }
     public PaymentMethod Method { get; private set; }
+    public string? ErrorCode { get; private set; }
     public string? ErrorMessage { get; private set; }
+    public string? GatewayResponse { get; private set; }
     public string? RefundReason { get; private set; }
     public string? RefundTransactionId { get; private set; }
+    public DateTimeOffset? ProcessedAt { get; private set; }
 
     private PaymentEntity() { }
 
@@ -30,34 +33,49 @@ public sealed class PaymentEntity : Aggregate<Guid>
             CreatedBy = createdBy
         };
 
-        payment.AddDomainEvent(new PaymentCreatedDomainEvent(payment.Id, orderId, amount));
+        payment.RaiseDomainEvent(new PaymentCreatedDomainEvent(payment.Id, orderId, amount));
         return payment;
     }
 
-    public void Complete(string transactionId, string? modifiedBy = null)
+    public void MarkAsProcessing(string? modifiedBy = null)
     {
         if (Status != PaymentStatus.Pending)
-            throw new InvalidOperationException("Only pending payments can be completed.");
+            throw new InvalidOperationException($"Cannot process payment in {Status} status");
 
-        TransactionId = transactionId;
-        Status = PaymentStatus.Completed;
+        Status = PaymentStatus.Processing;
         LastModifiedOnUtc = DateTimeOffset.UtcNow;
         LastModifiedBy = modifiedBy;
-
-        AddDomainEvent(new PaymentCompletedDomainEvent(Id, OrderId, transactionId));
     }
 
-    public void MarkAsFailed(string errorMessage, string? modifiedBy = null)
+    public void Complete(string transactionId, string? gatewayResponse = null, string? modifiedBy = null)
     {
-        if (Status != PaymentStatus.Pending)
-            throw new InvalidOperationException("Only pending payments can be marked as failed.");
+        if (Status != PaymentStatus.Processing && Status != PaymentStatus.Pending)
+            throw new InvalidOperationException($"Cannot complete payment in {Status} status");
 
-        Status = PaymentStatus.Failed;
-        ErrorMessage = errorMessage;
+        TransactionId = transactionId;
+        GatewayResponse = gatewayResponse;
+        Status = PaymentStatus.Completed;
+        ProcessedAt = DateTimeOffset.UtcNow;
         LastModifiedOnUtc = DateTimeOffset.UtcNow;
         LastModifiedBy = modifiedBy;
 
-        AddDomainEvent(new PaymentFailedDomainEvent(Id, OrderId, errorMessage));
+        RaiseDomainEvent(new PaymentCompletedDomainEvent(Id, OrderId, transactionId));
+    }
+
+    public void MarkAsFailed(string errorCode, string errorMessage, string? gatewayResponse = null, string? modifiedBy = null)
+    {
+        if (Status != PaymentStatus.Processing && Status != PaymentStatus.Pending)
+            throw new InvalidOperationException($"Cannot fail payment in {Status} status");
+
+        Status = PaymentStatus.Failed;
+        ErrorCode = errorCode;
+        ErrorMessage = errorMessage;
+        GatewayResponse = gatewayResponse;
+        ProcessedAt = DateTimeOffset.UtcNow;
+        LastModifiedOnUtc = DateTimeOffset.UtcNow;
+        LastModifiedBy = modifiedBy;
+
+        RaiseDomainEvent(new PaymentFailedDomainEvent(Id, OrderId, errorMessage));
     }
 
     public void Refund(string? refundReason, string? refundTransactionId = null, string? modifiedBy = null)
@@ -71,10 +89,20 @@ public sealed class PaymentEntity : Aggregate<Guid>
         LastModifiedOnUtc = DateTimeOffset.UtcNow;
         LastModifiedBy = modifiedBy;
 
-        AddDomainEvent(new PaymentRefundedDomainEvent(Id, OrderId, refundReason));
+        RaiseDomainEvent(new PaymentRefundedDomainEvent(Id, OrderId, refundReason));
     }
 
-    private void AddDomainEvent(IDomainEvent domainEvent)
+    public void Cancel(string? modifiedBy = null)
+    {
+        if (Status != PaymentStatus.Pending)
+            throw new InvalidOperationException("Only pending payments can be cancelled.");
+
+        Status = PaymentStatus.Cancelled;
+        LastModifiedOnUtc = DateTimeOffset.UtcNow;
+        LastModifiedBy = modifiedBy;
+    }
+
+    private void RaiseDomainEvent(IDomainEvent domainEvent)
     {
         // Access the protected list from Aggregate base class
         var domainEventsField = typeof(Aggregate<Guid>)
