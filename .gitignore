@@ -102,3 +102,7 @@ artifacts/
 *.tmp
 *.temp
 *~
+
+# Configuration
+appsettings.Development.json
+appsettings.Local.json
