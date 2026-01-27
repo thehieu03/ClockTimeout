@@ -1,5 +1,10 @@
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authorization.Infrastructure;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.InMemory;
+using Microsoft.Extensions.Configuration;
 using Order.Application.Services;
+using Order.Infrastructure.Data;
 
 namespace OrderUnitTest.Features.Order.Queries;
 
@@ -20,8 +25,33 @@ public class GetOrderByIdEndpointTests
         _factory = new WebApplicationFactory<Program>()
             .WithWebHostBuilder(builder =>
             {
+                builder.ConfigureAppConfiguration((context, config) =>
+                {
+                    config.AddInMemoryCollection(new Dictionary<string, string?>
+                    {
+                        {"ConnectionStrings:DbType", "InMemory"},
+                        {"ConnectionStrings:Database", "TestDb"}
+                    });
+                });
+                
                 builder.ConfigureTestServices(services =>
                 {
+                    var descriptor = services.SingleOrDefault(d => d.ServiceType == typeof(DbContextOptions<ApplicationDbContext>));
+                    if (descriptor != null)
+                        services.Remove(descriptor);
+                    
+                    services.AddDbContext<ApplicationDbContext>(options =>
+                    {
+                        options.UseInMemoryDatabase("TestOrderDb_" + Guid.NewGuid());
+                    });
+                    
+                    services.AddAuthorization(options =>
+                    {
+                        options.DefaultPolicy = new AuthorizationPolicyBuilder()
+                            .RequireAssertion(_ => true)
+                            .Build();
+                    });
+                    
                     services.AddSingleton(_mockSender.Object);
                     services.AddSingleton(mockCatalogGrpcService.Object);
                     services.AddSingleton(mockDiscountGrpcService.Object);

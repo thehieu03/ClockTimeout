@@ -1,4 +1,9 @@
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authorization.Infrastructure;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.InMemory;
+using Microsoft.Extensions.Configuration;
+using Payment.Infrastructure.Data;
 
 namespace PaymentUnitTest.Endpoints;
 
@@ -6,9 +11,9 @@ namespace PaymentUnitTest.Endpoints;
 [Category("Integration")]
 public class CompletePaymentEndpointTests
 {
-    private WebApplicationFactory<Program> _factory;
-    private Mock<ISender> _mockSender;
-    private HttpClient _client;
+    private WebApplicationFactory<Program> _factory = null!;
+    private Mock<ISender> _mockSender = null!;
+    private HttpClient _client = null!;
 
     [SetUp]
     public void Setup()
@@ -17,8 +22,33 @@ public class CompletePaymentEndpointTests
         _factory = new WebApplicationFactory<Program>()
             .WithWebHostBuilder(builder =>
             {
+                builder.ConfigureAppConfiguration((context, config) =>
+                {
+                    config.AddInMemoryCollection(new Dictionary<string, string?>
+                    {
+                        {"ConnectionStrings:DbType", "InMemory"},
+                        {"ConnectionStrings:Database", "TestDb"}
+                    });
+                });
+                
                 builder.ConfigureTestServices(services =>
                 {
+                    var descriptor = services.SingleOrDefault(d => d.ServiceType == typeof(DbContextOptions<ApplicationDbContext>));
+                    if (descriptor != null)
+                        services.Remove(descriptor);
+                    
+                    services.AddDbContext<ApplicationDbContext>(options =>
+                    {
+                        options.UseInMemoryDatabase("TestPaymentDb_" + Guid.NewGuid());
+                    });
+                    
+                    services.AddAuthorization(options =>
+                    {
+                        options.DefaultPolicy = new AuthorizationPolicyBuilder()
+                            .RequireAssertion(_ => true)
+                            .Build();
+                    });
+                    
                     services.AddSingleton(_mockSender.Object);
                     services.AddSingleton<IAuthorizationHandler, AllowAnonymousHandler>();
                 });
@@ -88,9 +118,9 @@ public class CompletePaymentEndpointTests
 [Category("Integration")]
 public class FailPaymentEndpointTests
 {
-    private WebApplicationFactory<Program> _factory;
-    private Mock<ISender> _mockSender;
-    private HttpClient _client;
+    private WebApplicationFactory<Program> _factory = null!;
+    private Mock<ISender> _mockSender = null!;
+    private HttpClient _client = null!;
 
     [SetUp]
     public void Setup()
@@ -99,8 +129,33 @@ public class FailPaymentEndpointTests
         _factory = new WebApplicationFactory<Program>()
             .WithWebHostBuilder(builder =>
             {
+                builder.ConfigureAppConfiguration((context, config) =>
+                {
+                    config.AddInMemoryCollection(new Dictionary<string, string?>
+                    {
+                        {"ConnectionStrings:DbType", "InMemory"},
+                        {"ConnectionStrings:Database", "TestDb"}
+                    });
+                });
+                
                 builder.ConfigureTestServices(services =>
                 {
+                    var descriptor = services.SingleOrDefault(d => d.ServiceType == typeof(DbContextOptions<ApplicationDbContext>));
+                    if (descriptor != null)
+                        services.Remove(descriptor);
+                    
+                    services.AddDbContext<ApplicationDbContext>(options =>
+                    {
+                        options.UseInMemoryDatabase("TestPaymentDb_" + Guid.NewGuid());
+                    });
+                    
+                    services.AddAuthorization(options =>
+                    {
+                        options.DefaultPolicy = new AuthorizationPolicyBuilder()
+                            .RequireAssertion(_ => true)
+                            .Build();
+                    });
+                    
                     services.AddSingleton(_mockSender.Object);
                     services.AddSingleton<IAuthorizationHandler, AllowAnonymousHandler>();
                 });
@@ -152,9 +207,9 @@ public class FailPaymentEndpointTests
 [Category("Integration")]
 public class RefundPaymentEndpointTests
 {
-    private WebApplicationFactory<Program> _factory;
-    private Mock<ISender> _mockSender;
-    private HttpClient _client;
+    private WebApplicationFactory<Program> _factory = null!;
+    private Mock<ISender> _mockSender = null!;
+    private HttpClient _client = null!;
 
     [SetUp]
     public void Setup()
@@ -163,8 +218,33 @@ public class RefundPaymentEndpointTests
         _factory = new WebApplicationFactory<Program>()
             .WithWebHostBuilder(builder =>
             {
+                builder.ConfigureAppConfiguration((context, config) =>
+                {
+                    config.AddInMemoryCollection(new Dictionary<string, string?>
+                    {
+                        {"ConnectionStrings:DbType", "InMemory"},
+                        {"ConnectionStrings:Database", "TestDb"}
+                    });
+                });
+                
                 builder.ConfigureTestServices(services =>
                 {
+                    var descriptor = services.SingleOrDefault(d => d.ServiceType == typeof(DbContextOptions<ApplicationDbContext>));
+                    if (descriptor != null)
+                        services.Remove(descriptor);
+                    
+                    services.AddDbContext<ApplicationDbContext>(options =>
+                    {
+                        options.UseInMemoryDatabase("TestPaymentDb_" + Guid.NewGuid());
+                    });
+                    
+                    services.AddAuthorization(options =>
+                    {
+                        options.DefaultPolicy = new AuthorizationPolicyBuilder()
+                            .RequireAssertion(_ => true)
+                            .Build();
+                    });
+                    
                     services.AddSingleton(_mockSender.Object);
                     services.AddSingleton<IAuthorizationHandler, AllowAnonymousHandler>();
                 });
@@ -240,9 +320,9 @@ public class RefundPaymentEndpointTests
 [Category("Integration")]
 public class GetPaymentByOrderIdEndpointTests
 {
-    private WebApplicationFactory<Program> _factory;
-    private Mock<ISender> _mockSender;
-    private HttpClient _client;
+    private WebApplicationFactory<Program> _factory = null!;
+    private Mock<ISender> _mockSender = null!;
+    private HttpClient _client = null!;
 
     [SetUp]
     public void Setup()
@@ -251,8 +331,33 @@ public class GetPaymentByOrderIdEndpointTests
         _factory = new WebApplicationFactory<Program>()
             .WithWebHostBuilder(builder =>
             {
+                builder.ConfigureAppConfiguration((context, config) =>
+                {
+                    config.AddInMemoryCollection(new Dictionary<string, string?>
+                    {
+                        {"ConnectionStrings:DbType", "InMemory"},
+                        {"ConnectionStrings:Database", "TestDb"}
+                    });
+                });
+                
                 builder.ConfigureTestServices(services =>
                 {
+                    var descriptor = services.SingleOrDefault(d => d.ServiceType == typeof(DbContextOptions<ApplicationDbContext>));
+                    if (descriptor != null)
+                        services.Remove(descriptor);
+                    
+                    services.AddDbContext<ApplicationDbContext>(options =>
+                    {
+                        options.UseInMemoryDatabase("TestPaymentDb_" + Guid.NewGuid());
+                    });
+                    
+                    services.AddAuthorization(options =>
+                    {
+                        options.DefaultPolicy = new AuthorizationPolicyBuilder()
+                            .RequireAssertion(_ => true)
+                            .Build();
+                    });
+                    
                     services.AddSingleton(_mockSender.Object);
                     services.AddSingleton<IAuthorizationHandler, AllowAnonymousHandler>();
                 });

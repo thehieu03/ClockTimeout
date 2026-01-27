@@ -10,11 +10,11 @@ public class ApplicationDbContextFactory : IDesignTimeDbContextFactory<Applicati
         // Use connection string for local development migrations
         // For docker: Server=sql-server,1433
         // For local: Server=localhost,1434 (mapped port from docker-compose)
-        var connectionString = "Server=localhost,1434;Database=Order_Service;User Id=sa;Password=SqlServer123!;Encrypt=False;TrustServerCertificate=True;";
+        var connectionString = "Host=localhost;Port=5433;Database=Order_Service;Username=postgres;Password=postgres123";
 
         // Create DbContextOptions
         var optionsBuilder = new DbContextOptionsBuilder<ApplicationDbContext>();
-        optionsBuilder.UseSqlServer(connectionString);
+        optionsBuilder.UseNpgsql(connectionString);
 
         return new ApplicationDbContext(optionsBuilder.Options);
     }

@@ -10,16 +10,18 @@ namespace PaymentUnitTest.Integration;
 [Category("Integration")]
 public class DatabaseConnectionTests
 {
-    private IConfiguration _configuration;
+    private IConfiguration _configuration = null!;
+    private string _connectionString = null!;
 
     [SetUp]
     public void Setup()
     {
-        var connectionString = "Server=localhost,1434;Database=Payment_Service;User Id=sa;Password=SqlServer123!;TrustServerCertificate=True;Encrypt=False";
+        // PostgreSQL connection string for local Docker container
+        _connectionString = "Host=localhost;Port=5433;Database=Payment_Service;Username=postgres;Password=postgres123";
         
-        var myConfiguration = new Dictionary<string, string>
+        var myConfiguration = new Dictionary<string, string?>
         {
-            {"ConnectionStrings:Database", connectionString}
+            {"ConnectionStrings:Database", _connectionString}
         };
 
         _configuration = new ConfigurationBuilder()
@@ -30,32 +32,47 @@ public class DatabaseConnectionTests
     [Test]
     public async Task CanConnectToDatabase()
     {
-        // Arrange
-        var connectionString = _configuration.GetConnectionString("Database");
+        // Arrange - First verify PostgreSQL server is running
+        var postgresConnectionString = _connectionString.Replace("Database=Payment_Service", "Database=postgres");
+        var postgresOptions = new DbContextOptionsBuilder<ApplicationDbContext>()
+            .UseNpgsql(postgresConnectionString)
+            .Options;
+            
+        using var postgresContext = new ApplicationDbContext(postgresOptions);
+        
+        bool canConnectPostgres = false;
+        try 
+        {
+            canConnectPostgres = await postgresContext.Database.CanConnectAsync();
+        } 
+        catch (Exception ex)
+        {
+            Assert.Ignore($"PostgreSQL server is not available. Skipping integration test. Error: {ex.Message}");
+            return;
+        }
+
+        if (!canConnectPostgres)
+        {
+            Assert.Ignore("Could not connect to PostgreSQL 'postgres' database. Skipping integration test.");
+            return;
+        }
+
+        // Act - Create and migrate the Payment_Service database
         var optionsBuilder = new DbContextOptionsBuilder<ApplicationDbContext>();
-        optionsBuilder.UseSqlServer(connectionString);
+        optionsBuilder.UseNpgsql(_connectionString);
 
         using var context = new ApplicationDbContext(optionsBuilder.Options);
 
-        // Act
-        // 1. Try connecting to Master to verify credentials
-        var masterConnectionString = connectionString.Replace("Database=Payment_Service", "Database=master");
-        var masterOptions = new DbContextOptionsBuilder<ApplicationDbContext>()
-            .UseSqlServer(masterConnectionString)
-            .Options;
-            
-        using var masterContext = new ApplicationDbContext(masterOptions);
-        bool canConnectMaster = false;
-        try {
-             canConnectMaster = await masterContext.Database.CanConnectAsync();
-        } catch {}
-
-        if (!canConnectMaster)
+        try 
         {
-             Assert.Fail("Could not connect to 'master' database. Credentials or SQL Server might be wrong/down.");
+            await context.Database.MigrateAsync();
+        }
+        catch (Exception ex)
+        {
+            Assert.Fail($"Migration failed: {ex.Message} -> Inner: {ex.InnerException?.Message}");
         }
 
-        // 2. Try connecting to Payment_Service database
+        // Assert - Verify connection to Payment_Service
         bool canConnect = false;
         try 
         {
@@ -63,26 +80,52 @@ public class DatabaseConnectionTests
         }
         catch (Exception ex)
         {
-             Assert.Fail($"CanConnectAsync threw exception: {ex.Message} -> Inner: {ex.InnerException?.Message}");
+            Assert.Fail($"CanConnectAsync threw exception: {ex.Message} -> Inner: {ex.InnerException?.Message}");
         }
 
-        if (!canConnect)
-        {
-             Assert.Fail("Connected to 'master' successfully, but failed to connect to 'Payment_Service'. The database 'Payment_Service' likely does not exist. Did migrations run?");
-        }
-        
-        canConnect.Should().BeTrue();
+        canConnect.Should().BeTrue("Should be able to connect to Payment_Service after migration");
     }
 
     [Test]
     public async Task PaymentsTableExists()
     {
-        // Arrange
-        var connectionString = _configuration.GetConnectionString("Database");
+        // Arrange - First verify PostgreSQL server is running
+        var postgresConnectionString = _connectionString.Replace("Database=Payment_Service", "Database=postgres");
+        var postgresOptions = new DbContextOptionsBuilder<ApplicationDbContext>()
+            .UseNpgsql(postgresConnectionString)
+            .Options;
+            
+        using var postgresContext = new ApplicationDbContext(postgresOptions);
+        
+        try 
+        {
+            var canConnectPostgres = await postgresContext.Database.CanConnectAsync();
+            if (!canConnectPostgres)
+            {
+                Assert.Ignore("PostgreSQL server is not available. Skipping integration test.");
+                return;
+            }
+        } 
+        catch
+        {
+            Assert.Ignore("PostgreSQL server is not available. Skipping integration test.");
+            return;
+        }
+
+        // Ensure database exists with migrations
         var optionsBuilder = new DbContextOptionsBuilder<ApplicationDbContext>();
-        optionsBuilder.UseSqlServer(connectionString);
+        optionsBuilder.UseNpgsql(_connectionString);
 
         using var context = new ApplicationDbContext(optionsBuilder.Options);
+
+        try
+        {
+            await context.Database.MigrateAsync();
+        }
+        catch (Exception ex)
+        {
+            Assert.Fail($"Migration failed: {ex.Message}");
+        }
 
         // Act & Assert
         var canConnect = await context.Database.CanConnectAsync();

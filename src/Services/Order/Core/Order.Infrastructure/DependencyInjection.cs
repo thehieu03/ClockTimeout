@@ -18,7 +18,7 @@ public static class DependencyInjection
         var connectionString=configuration.GetConnectionString("Database");
         services.AddDbContext<ApplicationDbContext>(options =>
         {
-            options.UseSqlServer(connectionString);
+            options.UseNpgsql(connectionString);
         });
         // Register Repositories, Unit of Work, etc.
         services.AddScoped<IOrderRepository,OrderRepository>();
