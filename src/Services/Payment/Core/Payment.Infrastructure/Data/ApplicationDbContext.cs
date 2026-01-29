@@ -7,6 +7,7 @@ namespace Payment.Infrastructure.Data;
 public class ApplicationDbContext:DbContext
 {
     public DbSet<PaymentEntity> Payments => Set<PaymentEntity>();
+    public DbSet<PaymentWebhookLog> WebhookLogs => Set<PaymentWebhookLog>();
 
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options):base(options)
     {

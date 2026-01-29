@@ -9,7 +9,6 @@ public record PaymentGatewayResult
     public string? RedirectUrl { get; init; }
     public string? RawResponse { get; init; }
     public Dictionary<string, string> Metadata { get; init; } = new();
-
     public static PaymentGatewayResult Success(string transactionId, string? redirectUrl = null, string? rawResponse = null)
         => new()
         {
@@ -18,7 +17,6 @@ public record PaymentGatewayResult
             RedirectUrl = redirectUrl,
             RawResponse = rawResponse
         };
-
     public static PaymentGatewayResult Failure(string errorCode, string errorMessage, string? rawResponse = null)
         => new()
         {

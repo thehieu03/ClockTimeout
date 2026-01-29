@@ -106,3 +106,5 @@ artifacts/
 # Configuration
 appsettings.Development.json
 appsettings.Local.json
+
+docker-compose.override.yml

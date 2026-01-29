@@ -7,6 +7,7 @@ using Payment.Domain.Repositories;
 using Payment.Infrastructure.Configurations;
 using Payment.Infrastructure.Data;
 using Payment.Infrastructure.Gateways;
+using Payment.Infrastructure.Gateways.Momo;
 using Payment.Infrastructure.Gateways.VnPay;
 using Payment.Infrastructure.Repositories;
 
@@ -21,7 +22,10 @@ public static class DependencyInjection
         {
             options.UseNpgsql(connectionString, builder => builder.EnableRetryOnFailure());
         });
-
+        // Bind settings
+        services.Configure<MomoSettings>(configuration.GetSection(MomoSettings.SectionName));
+        services.AddHttpClient<MomoPaymentGateway>();
+        services.AddScoped<IPaymentGateway, MomoPaymentGateway>();
         // Register Repositories
         services.AddScoped<IPaymentRepository, PaymentRepository>();
 

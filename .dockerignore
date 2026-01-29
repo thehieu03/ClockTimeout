@@ -71,3 +71,7 @@
 
 # Database
 **/docker-volumes/
+docker-volumes/
+
+# Node
+**/node_modules/

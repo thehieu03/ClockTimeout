@@ -29,7 +29,9 @@ RUN dotnet publish "Catalog.Api.csproj" -c Release -o /app/publish /p:UseAppHost
 # Runtime stage - Sử dụng image chuẩn (có curl cho healthcheck)
 FROM mcr.microsoft.com/dotnet/aspnet:10.0 AS final
 WORKDIR /app
-
+RUN apt-get update && apt-get install -y \
+    libgssapi-krb5-2 \
+    && rm -rf /var/lib/apt/lists/*
 EXPOSE 80
 EXPOSE 443
 

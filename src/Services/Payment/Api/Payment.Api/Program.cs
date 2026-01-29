@@ -1,3 +1,6 @@
+using Microsoft.EntityFrameworkCore;
+using Payment.Infrastructure.Data;
+
 namespace Payment.Api;
 
 public partial class Program
@@ -15,6 +18,14 @@ public partial class Program
         {
             app.UseSwagger();
             app.UseSwaggerUI();
+        }
+        using (var scope = app.Services.CreateScope())
+        {
+            var dbContext=scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+            if (dbContext.Database.GetPendingMigrations().Any())
+            {
+                dbContext.Database.Migrate();
+            }
         }
         app.UseHttpsRedirection();
         app.UseApi();

@@ -1,4 +1,3 @@
-using System.Security.Policy;
 using Common.Configurations;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
@@ -20,8 +19,8 @@ public static class SwaggerGenExtension
         var scopesArray = cfg.GetValue<string[]>($"{AuthorizationCfg.Section}:{AuthorizationCfg.Scopes}")
             ?? cfg.GetValue<string[]>($"{AuthorizationCfg.Section}:{AuthorizationCfg.Scope}");
         var oauthScopes = scopesArray?.ToDictionary(s => s, s => $"OpenID scope{s}");
-        var authUrl = new Url($"{authority}/protocol/openid-connect/auth");
-        var tokenUrl = new Url($"{authority}/protocol/openid-connect/token");
+        // var authUrl = new Url($"{authority}/protocol/openid-connect/auth");
+        // var tokenUrl = new Url($"{authority}/protocol/openid-connect/token");
         services.AddEndpointsApiExplorer();
         services.AddSwaggerGen(otps =>
         {
