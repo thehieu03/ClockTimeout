@@ -30,10 +30,12 @@ RUN dotnet publish "Catalog.Api.csproj" -c Release -o /app/publish /p:UseAppHost
 FROM mcr.microsoft.com/dotnet/aspnet:10.0 AS final
 WORKDIR /app
 RUN apt-get update && apt-get install -y \
+    curl \
+    net-tools \
     libgssapi-krb5-2 \
     && rm -rf /var/lib/apt/lists/*
-EXPOSE 80
-EXPOSE 443
+ENV ASPNETCORE_URLS=http://+:8080
+EXPOSE 8080
 
 # Copy published files
 COPY --from=publish /app/publish .

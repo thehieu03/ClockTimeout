@@ -1,11 +1,13 @@
 using Catalog.Application;
 using Catalog.Infrastructure;
 
+using Catalog.Api.Extensions;
+
 namespace Catalog.Api;
 
 public class Program
 {
-    public static void Main(string[] args)
+    public static async Task Main(string[] args)
     {
         var builder = WebApplication.CreateBuilder(args);
 
@@ -16,6 +18,11 @@ public class Program
         var app = builder.Build();
         app.UseApi();
         app.UseInfrastructure();
+
+        if (app.Environment.IsDevelopment())
+        {
+            await app.InitialiseDatabaseAsync();
+        }
 
         app.Run();
     }
