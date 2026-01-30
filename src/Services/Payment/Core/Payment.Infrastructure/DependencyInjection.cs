@@ -48,6 +48,9 @@ public static class DependencyInjection
         // Register Gateway Factory
         services.AddScoped<IPaymentGatewayFactory, PaymentGatewayFactory>();
 
+        // Register VietQR Settings
+        services.Configure<VietQRSettings>(configuration.GetSection(VietQRSettings.SectionName));
+
         return services;
     }
 }

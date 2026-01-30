@@ -1,0 +1,110 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Kết quả thanh toán Momo</title>
+    <meta charset="utf-8" />
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 20px;
+      }
+      .container {
+        background: white;
+        border-radius: 20px;
+        padding: 40px;
+        max-width: 500px;
+        width: 100%;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        text-align: center;
+      }
+      .logo {
+        width: 80px;
+        height: 80px;
+        margin: 0 auto 20px;
+        background: linear-gradient(135deg, #a50064 0%, #d82d8b 100%);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 32px;
+        font-weight: bold;
+      }
+      h1 {
+        color: #333;
+        margin-bottom: 20px;
+        font-size: 24px;
+      }
+      .status {
+        font-size: 28px;
+        font-weight: bold;
+        margin-bottom: 30px;
+        padding: 15px 30px;
+        border-radius: 10px;
+        display: inline-block;
+      }
+      .status.success {
+        background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+        color: white;
+      }
+      .status.failed {
+        background: linear-gradient(135deg, #eb3349 0%, #f45c43 100%);
+        color: white;
+      }
+      .details {
+        background: #f8f9fa;
+        border-radius: 10px;
+        padding: 20px;
+        margin-bottom: 20px;
+      }
+      .details p {
+        color: #555;
+        margin: 10px 0;
+        font-size: 16px;
+      }
+      .details strong {
+        color: #333;
+      }
+      .home-link {
+        display: inline-block;
+        padding: 15px 40px;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        text-decoration: none;
+        border-radius: 30px;
+        font-weight: bold;
+        transition:
+          transform 0.3s,
+          box-shadow 0.3s;
+      }
+      .home-link:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="logo">M</div>
+      <h1>Kết quả thanh toán Momo</h1>
+      <p class="status {{STATUS_CLASS}}">{{STATUS_TEXT}}</p>
+      <div class="details">
+        <p><strong>Mã đơn hàng:</strong> {{ORDER_ID}}</p>
+        <p><strong>Số tiền:</strong> {{AMOUNT}} VND</p>
+        <p><strong>Mã giao dịch:</strong> {{TRANS_ID}}</p>
+        <p><strong>Thông báo:</strong> {{MESSAGE}}</p>
+      </div>
+      <a href="/" class="home-link">Quay về trang chủ</a>
+    </div>
+  </body>
+</html>

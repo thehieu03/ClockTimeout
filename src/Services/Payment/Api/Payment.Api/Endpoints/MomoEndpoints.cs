@@ -52,7 +52,10 @@ public class MomoEndpoints : ICarterModule
             PaymentId: paymentId,
             IsSuccess: isSuccess,
             TransactionId: request.TransId.ToString(),
+            ResultCode: request.ResultCode.ToString(),
+            ResultMessage: request.Message,
             RawResponse: System.Text.Json.JsonSerializer.Serialize(request),
+            Gateway: "Momo",
             Actor: Actor.System("momo-webhook")
         );
 

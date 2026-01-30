@@ -69,7 +69,7 @@ public static class VnPayHelper
         }
         var queryString = BuildQueryString(vnpParams);
         var signData = queryString;
-        var signature = HmacSha512(hashSecret, signData);
+        var signature = ComputeHmacSha512(hashSecret, signData);
         return $"{baseUrl}?{queryString}&vnp_SecureHash={signature}";
     }
     public static bool ValidateSignature(
@@ -84,7 +84,7 @@ public static class VnPayHelper
             .ToDictionary(x => x.Key, x => x.Value));
 
         var signData = BuildQueryString(validationParams);
-        var checkSum = HmacSha512(hashSecret, signData);
+        var checkSum = ComputeHmacSha512(hashSecret, signData);
 
         return checkSum.Equals(inputHash, StringComparison.OrdinalIgnoreCase);
     }
@@ -155,7 +155,7 @@ public static class VnPayHelper
         return sb.ToString();
     }
 
-    private static string HmacSha512(string key, string data)
+    public static string ComputeHmacSha512(string key, string data)
     {
         using var hmac = new HMACSHA512(Encoding.UTF8.GetBytes(key));
         var hash = hmac.ComputeHash(Encoding.UTF8.GetBytes(data));
