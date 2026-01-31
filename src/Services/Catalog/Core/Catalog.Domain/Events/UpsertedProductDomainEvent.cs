@@ -1,3 +1,5 @@
+using Catalog.Domain.Abstractions;
+using Catalog.Domain.Enums;
 using MediatR;
 
 namespace Catalog.Domain.Events;
@@ -16,4 +18,9 @@ public sealed record UpsertedProductDomainEvent(
     DateTimeOffset CreatedOnUtc,
     string CreatedBy,
     DateTimeOffset? LastModifiedOnUtc,
-    string? LastModifiedBy) : IDomainEvent, INotification;
+    string? LastModifiedBy) : IDomainEvent
+{
+    public Guid EventId { get; } = Guid.NewGuid();
+    public DateTimeOffset OccurredOn { get; } = DateTimeOffset.UtcNow;
+    public string EventType => GetType().AssemblyQualifiedName ?? string.Empty;
+}

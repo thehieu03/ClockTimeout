@@ -30,5 +30,12 @@
     <ProjectReference Include="..\..\Core\Catalog.Application\Catalog.Application.csproj" />
     <ProjectReference Include="..\..\Core\Catalog.Infrastructure\Catalog.Infrastructure.csproj" />
   </ItemGroup>
-
+  <ItemGroup>
+    <Folder Include="Constants\" />
+    <Folder Include="Endpoints\" />
+    <Folder Include="Extensions\" />
+    <Folder Include="Mappings\" />
+    <Folder Include="Models\" />
+    <Folder Include="Properties\" />
+  </ItemGroup>
 </Project>

@@ -15,6 +15,9 @@
 		<PackageReference Include="Newtonsoft.Json" />
 	</ItemGroup>
 	<ItemGroup>
-	  <Folder Include="Event\" />
+	  <Folder Include="Entities\" />
+	  <Folder Include="Enums\" />
+	  <Folder Include="Events\" />
+	  <Folder Include="Exceptions\" />
 	</ItemGroup>
 </Project>

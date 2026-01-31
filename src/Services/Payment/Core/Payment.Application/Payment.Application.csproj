@@ -15,4 +15,11 @@
     <ProjectReference Include="..\..\..\..\Shared\Contracts\Payment.Contract\Payment.Contract.csproj" />
     <ProjectReference Include="..\Payment.Domain\Payment.Domain.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Dtos\" />
+    <Folder Include="Features\" />
+    <Folder Include="Gateways\" />
+    <Folder Include="Mappings\" />
+    <Folder Include="Models\" />
+  </ItemGroup>
 </Project>

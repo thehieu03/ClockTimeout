@@ -1,5 +1,8 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <ItemGroup>
+    <Folder Include="Protos\" />
+  </ItemGroup>
+  <ItemGroup>
     <Protobuf Include="Protos\discount.proto" GrpcServices="Client" />
   </ItemGroup>
   <ItemGroup>

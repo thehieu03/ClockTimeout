@@ -4,27 +4,16 @@ public record PublishProductCommand(Guid ProductId, Actor Actor) : ICommand<Guid
 
 public class PublishProductCommandValidator : AbstractValidator<PublishProductCommand>
 {
-    #region Ctors
-
     public PublishProductCommandValidator()
     {
         RuleFor(x => x.ProductId)
             .NotEmpty()
             .WithMessage(MessageCode.ProductIdIsRequired);
-
-        //RuleFor(x => x.Status)
-        //    .IsInEnum()
-        //    .Must(status => Enum.IsDefined(typeof(ProductStatus), status))
-        //    .WithMessage(MessageCode.StatusIsInvalid);
     }
-
-    #endregion
 }
 
 public class PublishProductCommandHandler(IDocumentSession session, IMediator mediator) : ICommandHandler<PublishProductCommand, Guid>
 {
-    #region Implementations
-
     public async Task<Guid> Handle(PublishProductCommand command, CancellationToken cancellationToken)
     {
         await session.BeginTransactionAsync(cancellationToken);
@@ -56,7 +45,4 @@ public class PublishProductCommandHandler(IDocumentSession session, IMediator me
 
         return entity.Id;
     }
-
-    #endregion
-
 }

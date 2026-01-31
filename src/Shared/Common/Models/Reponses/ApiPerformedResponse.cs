@@ -2,21 +2,8 @@
 
 public sealed class ApiPerformedResponse<T>
 {
-
-    #region Fields, Properties and Indexers
-
     public T Result { get; set; } = default!;
-
-    #endregion
-
-    #region Contructors
-
-    public ApiPerformedResponse()
-    {
-
+    public ApiPerformedResponse(){
     }
     public ApiPerformedResponse(T result) => Result = result;
-
-    #endregion
-
 }

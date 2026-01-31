@@ -1,6 +1,4 @@
 using Catalog.Application.Models.Results;
-using Catalog.Domain.Entities;
-using Marten;
 
 namespace Catalog.Application.Features.Category.Queries;
 

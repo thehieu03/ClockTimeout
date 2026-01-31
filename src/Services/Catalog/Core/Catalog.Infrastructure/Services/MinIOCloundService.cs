@@ -7,7 +7,7 @@ using System.Text.Json;
 
 namespace Catalog.Infrastructure.Services;
 
-public class MinIOCloundService : IMinlOCloundServices
+public class MinIOCloundService : IMinIOCloudService
 {
     #region prop
     private readonly IMinioClient _minioClient;

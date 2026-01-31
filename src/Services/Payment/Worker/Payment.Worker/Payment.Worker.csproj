@@ -13,4 +13,9 @@
       <ProjectReference Include="..\..\Core\Payment.Infrastructure\Payment.Infrastructure.csproj" />
       <ProjectReference Include="..\..\..\..\Shared\Common\Common.csproj" />
     </ItemGroup>
+    <ItemGroup>
+      <Folder Include="Jobs\" />
+      <Folder Include="Properties\" />
+      <Folder Include="Workers\" />
+    </ItemGroup>
 </Project>

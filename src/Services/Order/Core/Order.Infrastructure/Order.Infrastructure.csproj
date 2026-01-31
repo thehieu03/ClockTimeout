@@ -24,7 +24,11 @@
     <ProjectReference Include="..\..\..\..\Shared\Contracts\Catalog.Contract\Catalog.Contract.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Data\Migrations\" />
+    <Folder Include="Data\" />
+    <Folder Include="Exceptions\" />
+    <Folder Include="GrpcClients\" />
+    <Folder Include="Repositories\" />
     <Folder Include="Services\" />
+    <Folder Include="UnitOfWork\" />
   </ItemGroup>
 </Project>

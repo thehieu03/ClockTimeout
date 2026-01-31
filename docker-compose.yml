@@ -29,4 +29,18 @@ services:
       context: .
       dockerfile: src/Services/Order/Api/Order.Api/Dockerfile
 
+  payment-api:
+    image: ${DOCKER_REGISTRY-}payment_api
+    container_name: payment-api
+    build:
+      context: .
+      dockerfile: src/Services/Payment/Api/Payment.Api/Dockerfile
+
+  payment-worker:
+    image: ${DOCKER_REGISTRY-}payment_worker
+    container_name: payment-worker
+    build:
+      context: .
+      dockerfile: src/Services/Payment/Worker/Payment.Worker/Dockerfile
+
   # Volumes are now mapped to docker-volumes folder via docker-compose.override.yml

@@ -1,16 +1,16 @@
 using Common.Configurations;
 using MassTransit;
 using Microsoft.EntityFrameworkCore;
+using Payment.Infrastructure;
 using Payment.Infrastructure.Data;
+using Payment.Worker.Jobs;
 using Payment.Worker.Workers;
 
 var builder = Host.CreateApplicationBuilder(args);
 
 // Database Configuration
-builder.Services.AddDbContext<ApplicationDbContext>(options =>
-{
-    options.UseNpgsql(builder.Configuration.GetConnectionString(ConnectionStringsCfg.Database));
-});
+// Register Infrastructure Services (DbContext, Gateways, Repositories)
+builder.Services.AddInfrastructureServices(builder.Configuration);
 
 // MassTransit + RabbitMQ Configuration
 builder.Services.AddMassTransit(bus =>
@@ -32,6 +32,7 @@ builder.Services.AddMassTransit(bus =>
 
 // Background Services
 builder.Services.AddHostedService<OutboxBackgroundService>();
+builder.Services.AddHostedService<ReconcilePaymentBackgroundService>();
 
 var host = builder.Build();
 host.Run();

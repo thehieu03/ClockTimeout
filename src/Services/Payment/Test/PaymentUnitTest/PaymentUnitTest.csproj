@@ -18,9 +18,7 @@
         <PackageReference Include="FluentAssertions" />
         <PackageReference Include="Microsoft.EntityFrameworkCore" />
         <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" />
-        <PackageReference Include="Microsoft.Extensions.Configuration" />
-        <PackageReference Include="Microsoft.Extensions.Configuration.Json" />
-        <PackageReference Include="Microsoft.Extensions.Configuration.Binder" />
+
         <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" />
     </ItemGroup>
 
@@ -36,6 +34,7 @@
       <ProjectReference Include="..\..\..\..\Shared\Common\Common.csproj" />
       <ProjectReference Include="..\..\Core\Payment.Infrastructure\Payment.Infrastructure.csproj" />
       <ProjectReference Include="..\..\..\..\Shared\Contracts\Payment.Contract\Payment.Contract.csproj" />
+      <ProjectReference Include="..\..\Worker\Payment.Worker\Payment.Worker.csproj" />
     </ItemGroup>
 
 </Project>

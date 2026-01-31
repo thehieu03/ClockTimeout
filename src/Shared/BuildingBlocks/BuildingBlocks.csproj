@@ -35,5 +35,15 @@
     <PackageReference Include="Swashbuckle.AspNetCore.SwaggerUI" />
     <PackageReference Include="System.Security.Permissions" />
   </ItemGroup>
-  
+  <ItemGroup>
+    <Folder Include="Abstractions\" />
+    <Folder Include="Authentication\" />
+    <Folder Include="Behaviors\" />
+    <Folder Include="CQRS\" />
+    <Folder Include="DistributedTracing\" />
+    <Folder Include="Extensions\" />
+    <Folder Include="Logging\" />
+    <Folder Include="Pagination\" />
+    <Folder Include="Swagger\" />
+  </ItemGroup>
 </Project>

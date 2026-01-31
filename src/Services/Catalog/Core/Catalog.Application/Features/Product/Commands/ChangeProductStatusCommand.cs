@@ -8,7 +8,6 @@ namespace Catalog.Application.Features.Product.Commands;
 public record class ChangeProductStatusCommand(Guid ProductId, ProductStatus Status, Actor Actor) : ICommand<Guid>;
 public class ChangeProductStatusCommandValidator : AbstractValidator<ChangeProductStatusCommand>
 {
-    #region
     public ChangeProductStatusCommandValidator()
     {
         RuleFor(x => x.ProductId)
@@ -19,12 +18,9 @@ public class ChangeProductStatusCommandValidator : AbstractValidator<ChangeProdu
             .Must(status => Enum.IsDefined(typeof(ProductStatus), status))
             .WithMessage(MessageCode.StatusIsRequired);
     }
-    #endregion
 }
 public class ChangeProductStatusCommandHandler(IDocumentSession session, IMediator mediator) : ICommandHandler<ChangeProductStatusCommand, Guid>
 {
-    #region Implementations
-
     public async Task<Guid> Handle(ChangeProductStatusCommand command, CancellationToken cancellationToken)
     {
         await session.BeginTransactionAsync(cancellationToken);
@@ -56,6 +52,5 @@ public class ChangeProductStatusCommandHandler(IDocumentSession session, IMediat
 
         return entity.Id;
     }
-
-    #endregion
+    
 }

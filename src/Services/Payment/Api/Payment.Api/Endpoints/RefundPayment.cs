@@ -1,31 +1,35 @@
 using Carter;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using Payment.Api.Constants;
-using Payment.Application.Dtos;
 using Payment.Application.Features.Payment.Commands;
+using Common.ValueObjects;
 
 namespace Payment.Api.Endpoints;
 
-public sealed class RefundPayment : ICarterModule
+public class RefundPayment : ICarterModule
 {
     public void AddRoutes(IEndpointRouteBuilder app)
     {
-        app.MapPost(ApiRoutes.Payment.Refund, HandleRefundPaymentAsync)
-            .WithTags(ApiRoutes.Payment.Tags)
-            .WithName(nameof(RefundPayment))
-            .Produces(StatusCodes.Status204NoContent)
-            .ProducesProblem(StatusCodes.Status400BadRequest)
-            .ProducesProblem(StatusCodes.Status404NotFound);
+        app.MapPost("/api/payments/{paymentId}/refund", HandleAsync)
+            .WithTags("Payments")
+            .RequireAuthorization("Admin"); // Ensure 'Admin' policy exists or is configured
     }
 
-    private async Task<IResult> HandleRefundPaymentAsync(
-        [FromServices] ISender sender,
-        [FromRoute] Guid paymentId,
-        [FromBody] RefundPaymentDto dto)
+    private async Task<IResult> HandleAsync(
+        Guid paymentId,
+        [FromBody] RefundRequest req,
+        ISender sender)
     {
-        var command = new RefundPaymentCommand(paymentId, dto.RefundReason, dto.RefundTransactionId);
-        await sender.Send(command);
-        return Results.NoContent();
+        var command = new RefundPaymentCommand(
+            PaymentId: paymentId,
+            Reason: req.Reason,
+            Actor: Actor.System("System") // Or retrieve from user claims if HttpContext is available
+        );
+
+        var result = await sender.Send(command);
+
+        return result.IsSuccess ? Results.Ok(result) : Results.BadRequest(result);
     }
 }
+
+public record RefundRequest(string Reason);

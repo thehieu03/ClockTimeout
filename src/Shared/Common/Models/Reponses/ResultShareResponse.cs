@@ -2,20 +2,13 @@
 
 public sealed class ResultShareResponse<T> where T:class
 {
-
-    #region Fields, Properties and Indexers
-
     public T Data { get; set; } = default!;
     public string? Message { get; set; }
     public int StatusCode { get; set; }
     public string? Instance { get; set; }
     public List<ErrorResult>? Errors { get; set; }
-    #endregion
-    #region Constructors
-
     public ResultShareResponse()
     {
-        
     }
     public ResultShareResponse(
         T data,
@@ -37,7 +30,6 @@ public sealed class ResultShareResponse<T> where T:class
         Errors = errors;
         Message = message;
     }
-    #endregion
     public static ResultShareResponse<T> Failure(
         int statusCode =400,
         string? instance=null,

@@ -14,7 +14,12 @@
         <PackageReference Include="Swashbuckle.AspNetCore" />
     </ItemGroup>
     <ItemGroup>
+      <Folder Include="Constants\" />
+      <Folder Include="Endpoints\" />
+      <Folder Include="FileHtmlSend\" />
       <Folder Include="Middleware\" />
+      <Folder Include="Properties\" />
+      <Folder Include="Templates\" />
     </ItemGroup>
     <ItemGroup>
       <ProjectReference Include="..\..\Core\Payment.Application\Payment.Application.csproj" />

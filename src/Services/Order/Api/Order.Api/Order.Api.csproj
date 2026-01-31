@@ -17,7 +17,11 @@
         <PackageReference Include="Swashbuckle.AspNetCore" />
     </ItemGroup>
     <ItemGroup>
+      <Folder Include="Constants\" />
+      <Folder Include="Endpoints\" />
       <Folder Include="Middleware\" />
+      <Folder Include="Models\" />
+      <Folder Include="Properties\" />
     </ItemGroup>
     <ItemGroup>
       <ProjectReference Include="..\..\Core\Order.Application\Order.Application.csproj" />

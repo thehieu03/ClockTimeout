@@ -1,130 +1,160 @@
-using AutoMapper;
-using BuildingBlocks.CQRS;
-using Catalog.Application.Dtos;
-using Catalog.Application.Dtos.Products;
-using Catalog.Domain.Entities;
-using Common.Constants;
-using Common.Extensions;
-using FluentValidation;
-using Marten;
+using Catalog.Application.Services;
 
 namespace Catalog.Application.Features.Product.Commands;
 
-public record class CreateProductCommand(CreateProductDto Dto, Actor Actor) : ICommand<Guid>
-{
+public record CreateProductCommand(CreateProductDto Dto, Actor Actor) : ICommand<Guid>;
 
-}
 public class CreateProductCommandValidator : AbstractValidator<CreateProductCommand>
 {
+    #region Ctors
+
     public CreateProductCommandValidator()
     {
         RuleFor(x => x.Dto)
-        .NotNull()
-        .WithMessage(MessageCode.BadRequest)
-        .DependentRules(() =>
-        {
-            RuleFor(x => x.Dto.Name)
-            .NotEmpty()
-            .WithMessage(MessageCode.ProductNameIsRequired)
-            .MaximumLength(200)
-            .WithMessage(MessageCode.ProductNameMaxLength);
-            RuleFor(x => x.Dto.Sku)
-            .NotEmpty()
-            .WithMessage(MessageCode.SkuIsRequired)
-            .MaximumLength(100)
-            .WithMessage(MessageCode.SkuMaxLength);
-            RuleFor(x => x.Dto.ShortDescription)
-            .NotEmpty()
-            .WithMessage(MessageCode.ShortDescriptionIsRequired)
-            .MaximumLength(500)
-            .WithMessage(MessageCode.ShortDescriptionMaxLength);
-            RuleFor(x => x.Dto.LongDescription)
-            .NotEmpty()
-            .WithMessage(MessageCode.LongDescriptionIsRequired)
-            .MaximumLength(1000)
-            .WithMessage(MessageCode.LongDescriptionMaxLength);
-            RuleFor(x => x.Dto.Price)
-            .NotEmpty()
-            .WithMessage(MessageCode.PriceIsRequired)
-            .GreaterThan(0)
-            .WithMessage(MessageCode.PriceMustBeGreaterThanZero);
-            RuleFor(x => x.Dto.SalePrice)
-            .NotEmpty()
-            .WithMessage(MessageCode.SalePriceMustBeGreaterThanZero)
-            .GreaterThan(0)
-            .WithMessage(MessageCode.SalePriceMustBeGreaterThanZero);
-            RuleFor(x => x.Actor)
-            .NotEmpty()
-            .WithMessage(MessageCode.ActorIsRequired);
-            RuleFor(x => x.Actor)
             .NotNull()
-            .WithMessage(MessageCode.ActorIsRequired);
-        });
-    }
-}
-public class CreateProductCommandHandler : ICommandHandler<CreateProductCommand, Guid>
-{
-    private readonly IDocumentSession _session;
-    private readonly IMapper _mapper;
+            .WithMessage(MessageCode.BadRequest)
+            .DependentRules(() =>
+            {
+                RuleFor(x => x.Dto.Name)
+                    .NotEmpty()
+                    .WithMessage(MessageCode.ProductNameIsRequired);
 
-    public CreateProductCommandHandler(IDocumentSession session, IMapper mapper)
-    {
-        _session = session ?? throw new ArgumentNullException(nameof(session));
-        _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
+                RuleFor(x => x.Dto.Sku)
+                    .NotEmpty()
+                    .WithMessage(MessageCode.SkuIsRequired);
+
+                RuleFor(x => x.Dto.ShortDescription)
+                    .NotEmpty()
+                    .WithMessage(MessageCode.ShortDescriptionIsRequired);
+
+                RuleFor(x => x.Dto.LongDescription)
+                    .NotEmpty()
+                    .WithMessage(MessageCode.LongDescriptionIsRequired);
+
+                RuleFor(x => x.Dto.Price)
+                    .NotEmpty()
+                    .WithMessage(MessageCode.PriceIsRequired)
+                    .GreaterThan(1)
+                    .WithMessage(MessageCode.PriceIsRequired);
+
+                RuleFor(x => x.Dto.UploadThumbnail)
+                    .NotNull()
+                    .WithMessage(MessageCode.ThumbnailIsRequired);
+            });
+
     }
-    public async Task<Guid> Handle(CreateProductCommand request, CancellationToken cancellationToken)
+
+    #endregion
+}
+
+public class CreateProductCommandHandler(IMapper mapper,
+    IDocumentSession session,
+    IMinIOCloudService minIO,
+    ISender sender) : ICommandHandler<CreateProductCommand, Guid>
+{
+    #region Implementations
+
+    public async Task<Guid> Handle(CreateProductCommand command, CancellationToken cancellationToken)
     {
-        var dto = request.Dto;
-        await _session.BeginTransactionAsync(cancellationToken);
+        var dto = command.Dto;
+
+        await session.BeginTransactionAsync(cancellationToken);
+
+        await ValidateCategoryAsync(dto.CategoryIds, cancellationToken);
+        await ValidateBrandAsync(dto.BrandId, cancellationToken);
+
         var entity = ProductEntity.Create(
             id: Guid.NewGuid(),
             name: dto.Name!,
             sku: dto.Sku!,
+            slug: dto.Name!.Slugify(),
             shortDescription: dto.ShortDescription!,
             longDescription: dto.LongDescription!,
-            slug: dto.Name!.Slugify(),
             price: dto.Price,
             salePrice: dto.SalePrice,
             categoryIds: dto.CategoryIds?.Distinct().ToList(),
             brandId: dto.BrandId,
-            performedBy: request.Actor.ToString()
-        );
-        if (dto.Colors != null && dto.Colors.Any())
+            performedBy: command.Actor.ToString());
+
+        await UploadImagesAsync(dto.UploadImages, entity, cancellationToken);
+        await UploadThumbnailAsync(dto.UploadThumbnail, entity, cancellationToken);
+
+        entity.UpdateColors(dto.Colors?.Distinct().ToList(), command.Actor.ToString());
+        entity.UpdateSizes(dto.Sizes?.Distinct().ToList(), command.Actor.ToString());
+        entity.UpdateTags(dto.Tags?.Distinct().ToList(), command.Actor.ToString());
+        entity.UpdateSEO(dto.SEOTitle, dto.SEODescription, command.Actor.ToString());
+        entity.UpdateFeatured(dto.Featured, command.Actor.ToString());
+        entity.UpdateBarcode(dto.Barcode, command.Actor.ToString());
+        entity.UpdateUnitAndWeight(dto.Unit, dto.Weight, command.Actor.ToString());
+
+        if (command.Dto.Published)
         {
-            entity.UpdateColors(dto.Colors.Distinct().ToList(), request.Actor.ToString());
+            entity.Publish(command.Actor.ToString());
         }
-        if (dto.Sizes != null && dto.Sizes.Any())
+
+        session.Store(entity);
+
+        await session.SaveChangesAsync(cancellationToken);
+
+        if (entity.Published)
         {
-            entity.UpdateSizes(dto.Sizes.Distinct().ToList(), request.Actor.ToString());
+            await sender.Send(new PublishProductCommand(entity.Id, command.Actor), cancellationToken);
         }
-        if (dto.Tags != null && dto.Tags.Any())
-        {
-            entity.UpdateTags(dto.Tags.Distinct().ToList(), request.Actor.ToString());
-        }
-        if (!string.IsNullOrWhiteSpace(dto.SEOTitle) || !string.IsNullOrWhiteSpace(dto.SEODescription))
-        {
-            entity.UpdateSEO(dto.SEOTitle, dto.SEODescription, request.Actor.ToString());
-        }
-        if (dto.Featured)
-        {
-            entity.UpdateFeatured(dto.Featured, request.Actor.ToString());
-        }
-        if (!string.IsNullOrWhiteSpace(dto.Barcode))
-        {
-            entity.UpdateBarcode(dto.Barcode, request.Actor.ToString());
-        }
-        if (!string.IsNullOrWhiteSpace(dto.Unit) || dto.Weight.HasValue)
-        {
-            entity.UpdateUnitAndWeight(dto.Unit, dto.Weight, request.Actor.ToString());
-        }
-        if (dto.Published)
-        {
-            entity.Publish(request.Actor.ToString());
-        }
-        // Store entity in database
-        _session.Store(entity);
-        // Save change
-        await _session.SaveChangesAsync(cancellationToken);
+
         return entity.Id;
     }
+
+    #endregion
+
+    #region Methods
+
+    private async Task UploadThumbnailAsync(UploadFileBytes? image, ProductEntity entity, CancellationToken cancellationToken)
+    {
+        var result = await minIO.UploadFilesAsync([image!], AppConstants.Bucket.Products, true, cancellationToken);
+        var thumbnail = result.FirstOrDefault();
+        entity.AddOrUpdateThumbnail(mapper.Map<ProductImageEntity>(thumbnail));
+    }
+
+    private async Task UploadImagesAsync(
+        List<UploadFileBytes>? filesDto,
+        ProductEntity entity,
+        CancellationToken cancellationToken)
+    {
+        if (filesDto != null && filesDto.Any())
+        {
+            var result = await minIO.UploadFilesAsync(filesDto, AppConstants.Bucket.Products, true, cancellationToken);
+            entity.AddOrUpdateImages(mapper.Map<List<ProductImageEntity>>(result));
+        }
+    }
+
+    private async Task ValidateCategoryAsync(List<Guid>? inputCategoryIds, CancellationToken cancellationToken = default)
+    {
+        if (inputCategoryIds is { Count: > 0 })
+        {
+            var categories = await session.Query<CategoryEntity>().ToListAsync(token: cancellationToken);
+
+            var existingIds = categories.Select(c => c.Id).ToHashSet();
+            var invalidIds = inputCategoryIds.Where(id => !existingIds.Contains(id)).ToList();
+
+            if (invalidIds.Any())
+            {
+                throw new ClientValidationException(MessageCode.CategoryIsNotExists, string.Join(", ", invalidIds));
+            }
+        }
+    }
+
+    private async Task ValidateBrandAsync(Guid? brandId, CancellationToken cancellationToken = default)
+    {
+        if (brandId.HasValue)
+        {
+            var brands = await session.Query<BrandEntity>().ToListAsync(token: cancellationToken);
+            var existingIds = brands.Select(b => b.Id).ToHashSet();
+            if (!existingIds.Contains(brandId.Value))
+            {
+                throw new ClientValidationException(MessageCode.BrandIsNotExists, brandId);
+            }
+        }
+    }
+
+    #endregion
 }

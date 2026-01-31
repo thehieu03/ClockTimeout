@@ -1,4 +1,6 @@
-﻿namespace Catalog.Domain.Entities;
+﻿using Catalog.Domain.Abstractions;
+
+namespace Catalog.Domain.Entities;
 
 public sealed class CategoryEntity:Entity<Guid>
 {

@@ -17,4 +17,8 @@
     <ProjectReference Include="..\..\src\Shared\Common\Common.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Baskets\" />
+  </ItemGroup>
+
 </Project>

@@ -1,7 +1,3 @@
-using Catalog.Domain.Entities;
-using Catalog.Domain.Events;
-using MediatR;
-
 namespace Catalog.Application.Features.Product.Commands;
 
 public record class UnpublishProductCommand(Guid ProductId, Actor Actor) : ICommand<Guid>;
@@ -22,8 +18,6 @@ public class UnpublishProductCommandValidator : AbstractValidator<UnpublishProdu
 
 public class UnpublishProductCommandHandler(IDocumentSession session, IMediator mediator) : ICommandHandler<UnpublishProductCommand, Guid>
 {
-    #region Implementations
-
     public async Task<Guid> Handle(UnpublishProductCommand command, CancellationToken cancellationToken)
     {
         await session.BeginTransactionAsync(cancellationToken);
@@ -41,6 +35,4 @@ public class UnpublishProductCommandHandler(IDocumentSession session, IMediator 
 
         return entity.Id;
     }
-
-    #endregion
 }

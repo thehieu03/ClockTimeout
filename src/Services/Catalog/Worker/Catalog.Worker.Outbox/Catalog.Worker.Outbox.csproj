@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk.Worker">
+    <PropertyGroup>
+      <RootNamespace>Catalog.Worker.Outbox</RootNamespace>
+    </PropertyGroup>
+    <ItemGroup>
+        <PackageReference Include="MassTransit.Abstractions" />
+        <PackageReference Include="Microsoft.Extensions.Hosting"/>
+    </ItemGroup>
+    <ItemGroup>
+        <ProjectReference Include="..\..\Core\Catalog.Domain\Catalog.Domain.csproj" />
+        <ProjectReference Include="..\..\Core\Catalog.Infrastructure\Catalog.Infrastructure.csproj" />
+    </ItemGroup>
+</Project>

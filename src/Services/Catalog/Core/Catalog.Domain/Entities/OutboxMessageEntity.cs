@@ -1,4 +1,5 @@
-﻿using Common.Constants;
+﻿using Catalog.Domain.Abstractions;
+using Common.Constants;
 
 namespace Catalog.Domain.Entities;
 

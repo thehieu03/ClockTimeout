@@ -10,6 +10,7 @@
     <PackageVersion Include="Grpc.Net.ClientFactory" Version="2.62.0" />
     <PackageVersion Include="Json.Formater" Version="1.0.0" />
     <PackageVersion Include="MassTransit" Version="9.0.0" />
+    <PackageVersion Include="MassTransit.Abstractions" Version="9.0.0" />
     <PackageVersion Include="MassTransit.RabbitMQ" Version="9.0.0" />
     <PackageVersion Include="Newtonsoft.Json" Version="13.0.3" />
     <!-- MediatR -->

@@ -1,7 +1,6 @@
 global using Common.ValueObjects;
 global using BuildingBlocks.CQRS;
 global using BuildingBlocks.Pagination;
-
 global using Catalog.Application.Dtos.Products;
 global using FluentValidation;
 global using Common.Models;

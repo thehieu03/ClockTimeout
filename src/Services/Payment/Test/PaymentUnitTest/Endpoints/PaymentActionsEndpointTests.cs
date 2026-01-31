@@ -279,33 +279,30 @@ public class RefundPaymentEndpointTests
     {
         // Arrange
         var paymentId = Guid.NewGuid();
-        var dto = new RefundPaymentDto
-        {
-            RefundReason = "Customer request",
-            RefundTransactionId = "REFUND-123"
-        };
+
 
         _mockSender
             .Setup(s => s.Send(It.Is<RefundPaymentCommand>(c =>
                 c.PaymentId == paymentId &&
-                c.RefundReason == "Customer request" &&
-                c.RefundTransactionId == "REFUND-123"),
+                c.Reason == "Customer request"),
                 It.IsAny<CancellationToken>()))
-            .ReturnsAsync(Unit.Value);
+            .ReturnsAsync(new RefundPaymentResult(true, "Refund Successful"));
 
         // Act
-        var response = await _client.PostAsJsonAsync($"/admin/payments/{paymentId}/refund", dto);
+        // Use anonymous object or update DTO if accessible. Assuming RefundRequest structure: { reason: "..." }
+        var dto = new { Reason = "Customer request" };
+        var response = await _client.PostAsJsonAsync($"/api/payments/{paymentId}/refund", dto); // Endpoint is /api/payments/.../refund
 
         // Assert
-        response.StatusCode.Should().Be(HttpStatusCode.NoContent);
+        response.StatusCode.Should().Be(HttpStatusCode.OK); // Endpoint returns Ok(result) not NoContent
     }
 
     [Test]
-    public async Task RefundPayment_ShouldReturnNotFound_WhenPaymentDoesNotExist()
+    public async Task RefundPayment_ShouldReturnBadRequest_WhenPaymentDoesNotExist()
     {
         // Arrange
         var paymentId = Guid.NewGuid();
-        var dto = new RefundPaymentDto { RefundReason = "Customer request" };
+        var dto = new { Reason = "Customer request" };
 
         _mockSender
             .Setup(s => s.Send(It.IsAny<RefundPaymentCommand>(), It.IsAny<CancellationToken>()))

@@ -1,5 +1,3 @@
 namespace Catalog.Application.Models.Filters;
 
-public record class GetAllCategoriesFilter(
-    string? SearchText,
-    Guid? ParentId);
+public record class GetAllCategoriesFilter(Guid? ParentId);

@@ -82,7 +82,6 @@ public class OutboxBackgroundService(IServiceProvider serviceProvider,ILogger<Ou
                             message.RecordFailedAttempt(error, currentTime);
                             continue;
                         }
-
                         var eventData = JsonConvert.DeserializeObject(message.Content!, type);
                         if (eventData == null)
                         {

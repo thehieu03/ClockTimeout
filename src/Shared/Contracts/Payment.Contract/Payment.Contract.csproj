@@ -1,7 +1,8 @@
 <Project Sdk="Microsoft.NET.Sdk">
-
-    <ItemGroup>
-      <PackageReference Include="MassTransit" />
-    </ItemGroup>
-
+  <ItemGroup>
+    <Folder Include="IntegrationEvents\" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="MassTransit" />
+  </ItemGroup>
 </Project>

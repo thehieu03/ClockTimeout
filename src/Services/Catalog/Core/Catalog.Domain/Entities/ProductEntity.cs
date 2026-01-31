@@ -1,3 +1,5 @@
+using Catalog.Domain.Abstractions;
+using Catalog.Domain.Enums;
 using Catalog.Domain.Exceptions;
 using Common.Constants;
 

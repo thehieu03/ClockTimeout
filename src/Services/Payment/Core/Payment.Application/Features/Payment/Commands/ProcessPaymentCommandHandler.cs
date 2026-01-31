@@ -108,11 +108,7 @@ public partial class ProcessPaymentCommandHandler(
                     // Store the transaction ID for later callback verification
                     payment.SetTransactionId(gatewayResult.TransactionId!);
                     
-                    logger.LogInformation(
-                        "Payment {PaymentId} requires redirect. TransactionId: {TransactionId}, RedirectUrl: {RedirectUrl}",
-                        payment.Id,
-                        gatewayResult.TransactionId,
-                        gatewayResult.RedirectUrl);
+                    LogPaymentRequiresRedirect(logger, payment.Id, gatewayResult.TransactionId!, gatewayResult.RedirectUrl);
                 }
                 else
                 {
@@ -120,10 +116,7 @@ public partial class ProcessPaymentCommandHandler(
                     // Complete the payment immediately
                     payment.Complete(gatewayResult.TransactionId!, gatewayResult.RawResponse, command.Actor.Value);
 
-                    logger.LogInformation(
-                        "Payment {PaymentId} completed successfully. TransactionId: {TransactionId}",
-                        payment.Id,
-                        gatewayResult.TransactionId);
+                    LogPaymentCompleted(logger, payment.Id, gatewayResult.TransactionId!);
                 }
             }
             else
@@ -134,11 +127,7 @@ public partial class ProcessPaymentCommandHandler(
                     gatewayResult.RawResponse,
                     command.Actor.Value);
 
-                logger.LogWarning(
-                    "Payment {PaymentId} failed. Error: {ErrorCode} - {ErrorMessage}",
-                    payment.Id,
-                    gatewayResult.ErrorCode,
-                    gatewayResult.ErrorMessage);
+                LogPaymentFailed(logger, payment.Id, gatewayResult.ErrorCode ?? "UNKNOWN", gatewayResult.ErrorMessage ?? "Unknown error");
             }
 
             // 8. Save changes and dispatch domain events
@@ -178,4 +167,13 @@ public partial class ProcessPaymentCommandHandler(
 
     [LoggerMessage(Level = LogLevel.Information, Message = "Calling payment gateway {Method} for payment {PaymentId}")]
     private static partial void LogCallingGateway(ILogger logger, PaymentMethod method, Guid paymentId);
+
+    [LoggerMessage(Level = LogLevel.Information, Message = "Payment {PaymentId} requires redirect. TransactionId: {TransactionId}, RedirectUrl: {RedirectUrl}")]
+    private static partial void LogPaymentRequiresRedirect(ILogger logger, Guid paymentId, string transactionId, string redirectUrl);
+
+    [LoggerMessage(Level = LogLevel.Information, Message = "Payment {PaymentId} completed successfully. TransactionId: {TransactionId}")]
+    private static partial void LogPaymentCompleted(ILogger logger, Guid paymentId, string transactionId);
+
+    [LoggerMessage(Level = LogLevel.Warning, Message = "Payment {PaymentId} failed. Error: {ErrorCode} - {ErrorMessage}")]
+    private static partial void LogPaymentFailed(ILogger logger, Guid paymentId, string errorCode, string errorMessage);
 }

@@ -18,14 +18,6 @@ public sealed class GetAllCategoriesQueryHandler(IDocumentSession session, IMapp
         var paging = query.pagination;
         var categoryQuery = session.Query<CategoryEntity>().AsQueryable();
 
-        if (!string.IsNullOrWhiteSpace(filter.SearchText))
-        {
-            var search = filter.SearchText.Trim();
-            categoryQuery = categoryQuery.Where(x =>
-                (x.Name != null && x.Name.Contains(search)) ||
-                (x.Description != null && x.Description.Contains(search)));
-        }
-
         if (filter.ParentId.HasValue)
         {
             categoryQuery = categoryQuery.Where(x => x.ParentId == filter.ParentId.Value);

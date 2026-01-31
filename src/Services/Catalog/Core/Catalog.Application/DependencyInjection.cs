@@ -1,6 +1,5 @@
 using BuildingBlocks.Behaviors;
 using BuildingBlocks.Extensions.Handler;
-using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.FeatureManagement;
 using System.Reflection;
