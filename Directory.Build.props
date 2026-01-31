@@ -6,5 +6,9 @@
     <LangVersion>latest</LangVersion>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>portable</DebugType>
+    <NoWarn>$(NoWarn);NU1510</NoWarn>
   </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="System.Security.Cryptography.Xml" />
+  </ItemGroup>
 </Project>

@@ -3,4 +3,4 @@ using Order.Domain.Entities;
 
 namespace Order.Domain.Events;
 
-public sealed class OrderCreatedDomainEvent(OrderEntity OrderId) : IDomainEvent;
+public sealed record OrderCreatedDomainEvent(OrderEntity OrderId) : IDomainEvent;

@@ -25,7 +25,7 @@ public sealed class UpdateProductCommandHandlerTests
     {
         _mockSession = new Mock<IDocumentSession>();
         _mockMediator = new Mock<IMediator>();
-        _handler = new UpdateProductCommandHandler(_mockSession.Object, null!, _mockMediator.Object);
+        _handler = new UpdateProductCommandHandler(_mockSession.Object, _mockMediator.Object);
     }
 
     [TestMethod]

@@ -64,7 +64,7 @@ public class UpdateProductCommandValidator : AbstractValidator<UpdateProductComm
     #endregion
 }
 
-public class UpdateProductCommandHandler(IDocumentSession session, IMapper mapper, IMediator mediator) : ICommandHandler<UpdateProductCommand, Guid>
+public class UpdateProductCommandHandler(IDocumentSession session, IMediator mediator) : ICommandHandler<UpdateProductCommand, Guid>
 {
     #region Implementations
 

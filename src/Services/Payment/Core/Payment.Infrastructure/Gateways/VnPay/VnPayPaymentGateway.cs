@@ -7,7 +7,7 @@ using Payment.Infrastructure.Configurations;
 
 namespace Payment.Infrastructure.Gateways.VnPay;
 
-public class VnPayPaymentGateway(VnPaySettings settings, ILogger<VnPayPaymentGateway> logger, HttpClient httpClient) : IPaymentGateway
+public class VnPayPaymentGateway(VnPaySettings settings, ILogger<VnPayPaymentGateway> logger) : IPaymentGateway
 {
 
     public PaymentMethod SupportedMethod { get; } = PaymentMethod.VnPay;

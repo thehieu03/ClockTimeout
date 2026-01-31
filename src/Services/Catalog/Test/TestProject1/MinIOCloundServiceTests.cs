@@ -69,7 +69,7 @@ public sealed class MinIOCloundServiceTests
         Assert.AreEqual(1, result.Count);
         Assert.AreEqual("bucket", result[0].FolderName);
         Assert.AreEqual("image/png", result[0].ContentType);
-        Assert.IsTrue(result[0].PublicURL.Contains("bucket"));
+        Assert.IsTrue(result[0].PublicURL?.Contains("bucket") == true);
 
         _minioClient.Verify(c => c.BucketExistsAsync(It.IsAny<BucketExistsArgs>(), ct), Times.Once);
         _minioClient.Verify(c => c.PutObjectAsync(It.IsAny<PutObjectArgs>(), ct), Times.Once);

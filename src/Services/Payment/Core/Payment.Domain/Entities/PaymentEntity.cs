@@ -69,7 +69,7 @@ public sealed class PaymentEntity : Aggregate<Guid>
         LastModifiedOnUtc = DateTimeOffset.UtcNow;
         LastModifiedBy = modifiedBy;
 
-        RaiseDomainEvent(new PaymentCompletedDomainEvent(Id, OrderId, transactionId));
+        RaiseDomainEvent(new PaymentCompletedDomainEvent(Id, OrderId, transactionId, Amount, DateTimeOffset.UtcNow));
     }
 
     public void MarkAsFailed(string errorCode, string errorMessage, string? gatewayResponse = null, string? modifiedBy = null)
@@ -85,7 +85,7 @@ public sealed class PaymentEntity : Aggregate<Guid>
         LastModifiedOnUtc = DateTimeOffset.UtcNow;
         LastModifiedBy = modifiedBy;
 
-        RaiseDomainEvent(new PaymentFailedDomainEvent(Id, OrderId, errorMessage));
+        RaiseDomainEvent(new PaymentFailedDomainEvent(Id, OrderId, errorCode, errorMessage, DateTimeOffset.UtcNow));
     }
 
     public void Refund(string? refundReason, string? refundTransactionId = null, string? modifiedBy = null)

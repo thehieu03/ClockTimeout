@@ -2,4 +2,10 @@ using BuildingBlocks.Abstractions;
 
 namespace Payment.Domain.Events;
 
-public record PaymentFailedDomainEvent(Guid PaymentId, Guid OrderId, string ErrorMessage) : IDomainEvent;
+public sealed record PaymentFailedDomainEvent(
+    Guid PaymentId,
+    Guid OrderId,
+    string ErrorCode,
+    string ErrorMessage,
+    DateTimeOffset OccurredOn
+) : IDomainEvent;

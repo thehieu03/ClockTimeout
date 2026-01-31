@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk.Worker">
+    <ItemGroup>
+        <PackageReference Include="MassTransit.RabbitMQ" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Design">
+          <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+          <PrivateAssets>all</PrivateAssets>
+        </PackageReference>
+        <PackageReference Include="Microsoft.Extensions.Hosting" />
+        <PackageReference Include="Newtonsoft.Json" />
+        <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" />
+    </ItemGroup>
+    <ItemGroup>
+      <ProjectReference Include="..\..\Core\Payment.Infrastructure\Payment.Infrastructure.csproj" />
+      <ProjectReference Include="..\..\..\..\Shared\Common\Common.csproj" />
+    </ItemGroup>
+</Project>

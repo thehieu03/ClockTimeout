@@ -41,6 +41,9 @@
   <Folder Name="/src/Services/Payment/Test/">
     <Project Path="D:/C#/ClockTimeout/src/Services/Payment/Test/PaymentUnitTest/PaymentUnitTest.csproj" />
   </Folder>
+  <Folder Name="/src/Services/Payment/Worker/">
+    <Project Path="src/Services/Payment/Worker/Payment.Worker/Payment.Worker.csproj" />
+  </Folder>
   <Folder Name="/src/Shared/">
     <Project Path="D:/C#/ClockTimeout/Shared/EventSourcing/EventSourcing.csproj" Id="1f3f22ef-2ef0-4de3-9c51-d1f68354e9f0" />
     <Project Path="D:/C#/ClockTimeout/src/Shared/BuildingBlocks/BuildingBlocks.csproj" />

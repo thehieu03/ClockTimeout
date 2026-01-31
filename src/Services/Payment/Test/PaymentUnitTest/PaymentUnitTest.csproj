@@ -35,6 +35,7 @@
       <ProjectReference Include="..\..\..\..\Shared\BuildingBlocks\BuildingBlocks.csproj" />
       <ProjectReference Include="..\..\..\..\Shared\Common\Common.csproj" />
       <ProjectReference Include="..\..\Core\Payment.Infrastructure\Payment.Infrastructure.csproj" />
+      <ProjectReference Include="..\..\..\..\Shared\Contracts\Payment.Contract\Payment.Contract.csproj" />
     </ItemGroup>
 
 </Project>

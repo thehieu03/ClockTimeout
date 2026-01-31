@@ -49,7 +49,12 @@ public class CompletePaymentEndpointTests
                             .Build();
                     });
                     
-                    services.AddSingleton(_mockSender.Object);
+                    // Remove existing ISender registration and add mock
+                    var senderDescriptor = services.SingleOrDefault(d => d.ServiceType == typeof(ISender));
+                    if (senderDescriptor != null)
+                        services.Remove(senderDescriptor);
+                    services.AddScoped<ISender>(_ => _mockSender.Object);
+                    
                     services.AddSingleton<IAuthorizationHandler, AllowAnonymousHandler>();
                 });
             });
@@ -156,7 +161,12 @@ public class FailPaymentEndpointTests
                             .Build();
                     });
                     
-                    services.AddSingleton(_mockSender.Object);
+                    // Remove existing ISender registration and add mock
+                    var senderDescriptor = services.SingleOrDefault(d => d.ServiceType == typeof(ISender));
+                    if (senderDescriptor != null)
+                        services.Remove(senderDescriptor);
+                    services.AddScoped<ISender>(_ => _mockSender.Object);
+                    
                     services.AddSingleton<IAuthorizationHandler, AllowAnonymousHandler>();
                 });
             });
@@ -245,7 +255,12 @@ public class RefundPaymentEndpointTests
                             .Build();
                     });
                     
-                    services.AddSingleton(_mockSender.Object);
+                    // Remove existing ISender registration and add mock
+                    var senderDescriptor = services.SingleOrDefault(d => d.ServiceType == typeof(ISender));
+                    if (senderDescriptor != null)
+                        services.Remove(senderDescriptor);
+                    services.AddScoped<ISender>(_ => _mockSender.Object);
+                    
                     services.AddSingleton<IAuthorizationHandler, AllowAnonymousHandler>();
                 });
             });
@@ -358,7 +373,12 @@ public class GetPaymentByOrderIdEndpointTests
                             .Build();
                     });
                     
-                    services.AddSingleton(_mockSender.Object);
+                    // Remove existing ISender registration and add mock
+                    var senderDescriptor = services.SingleOrDefault(d => d.ServiceType == typeof(ISender));
+                    if (senderDescriptor != null)
+                        services.Remove(senderDescriptor);
+                    services.AddScoped<ISender>(_ => _mockSender.Object);
+                    
                     services.AddSingleton<IAuthorizationHandler, AllowAnonymousHandler>();
                 });
             });

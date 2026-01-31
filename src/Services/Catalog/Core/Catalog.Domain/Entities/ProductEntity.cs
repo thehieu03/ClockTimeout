@@ -176,8 +176,8 @@ public sealed class ProductEntity : Aggregate<Guid>
 
     public void AddOrUpdateImages(List<ProductImageEntity>? newImages = null, IEnumerable<string>? curentImageUrls = null)
     {
-        if ((newImages is null && !newImages.Any()) &&
-            (curentImageUrls is null && !curentImageUrls.Any())) return;
+        if ((newImages is null || !newImages.Any()) &&
+            (curentImageUrls is null || !curentImageUrls.Any())) return;
         Images ??= new List<ProductImageEntity>();
         var oldByUrl = Images
             .Where(i => !string.IsNullOrWhiteSpace(i.PublicURL))

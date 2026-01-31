@@ -5,7 +5,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Catalog.Application.Features.Product.EventHandlers.Domain;
 
-public sealed class UpsertedProductDomainEventHandler(IDocumentSession session, ILogger<UpsertedProductDomainEventHandler> logger) 
+public sealed class UpsertedProductDomainEventHandler(ILogger<UpsertedProductDomainEventHandler> logger) 
     : INotificationHandler<UpsertedProductDomainEvent>
 {
 

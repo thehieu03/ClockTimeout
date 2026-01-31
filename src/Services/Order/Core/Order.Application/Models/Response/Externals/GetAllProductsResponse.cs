@@ -5,7 +5,7 @@ public class GetAllProductsResponse
 
     #region Fields, Properties and Indexers
 
-    public List<ProductResponse?> Items{get;set;}
+    public List<ProductResponse?> Items{get;set;} = new();
 
     #endregion
 }

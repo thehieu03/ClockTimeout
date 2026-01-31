@@ -135,7 +135,7 @@ public sealed class UpdateOrderCommandHandler(IUnitOfWork unitOfWork,ICatalogGrp
             throw new ClientValidationException(MessageCode.ProductIsNotExists);
         }
 
-        var validProducts = productsResponse.Items.ToDictionary(p => p.Id, p => p);
+        var validProducts = productsResponse.Items.Where(p => p != null).ToDictionary(p => p!.Id, p => p!);
         var dtoProductIdSet = dto.OrderItems.Select(i => i.ProductId).ToHashSet();
         var toRemove = existingOrder.OrderItems
             .Where(oi => !validProducts.ContainsKey(oi.Product.Id) || !dtoProductIdSet.Contains(oi.Product.Id))

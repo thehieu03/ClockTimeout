@@ -10,10 +10,12 @@ using Payment.Application.Models.Results;
 using Payment.Domain.Abstractions;
 using Payment.Domain.Enums;
 using Payment.Domain.Repositories;
+using Polly;
+using Polly.Retry;
 
 namespace Payment.Application.Features.Payment.Commands;
 
-public class ProcessPaymentCommandHandler(
+public partial class ProcessPaymentCommandHandler(
     IPaymentRepository paymentRepository,
     IUnitOfWork unitOfWork,
     IPaymentGatewayFactory gatewayFactory,
@@ -21,11 +23,15 @@ public class ProcessPaymentCommandHandler(
     ILogger<ProcessPaymentCommandHandler> logger)
     : ICommandHandler<ProcessPaymentCommand, ProcessPaymentResult>
 {
+    // Retry configuration
+    private const int MaxRetryAttempts = 3;
+    private static readonly TimeSpan BaseDelay = TimeSpan.FromSeconds(1);
+
     public async Task<ProcessPaymentResult> Handle(
         ProcessPaymentCommand command,
         CancellationToken cancellationToken)
     {
-        logger.LogInformation("Processing payment: {PaymentId}", command.PaymentId);
+        LogProcessingPayment(logger, command.PaymentId);
 
         // 1. Get payment from database
         var payment = await paymentRepository.GetByIdAsync(command.PaymentId, cancellationToken);
@@ -35,10 +41,10 @@ public class ProcessPaymentCommandHandler(
             throw new NotFoundException(MessageCode.PaymentNotFound, command.PaymentId);
         }
 
-        // 2. Validate payment status
+        // 2. Validate payment status (Idempotency check)
         if (payment.Status == PaymentStatus.Completed)
         {
-            logger.LogWarning("Payment {PaymentId} is already completed", command.PaymentId);
+            LogPaymentAlreadyCompleted(logger, command.PaymentId);
             return ProcessPaymentResult.Success(mapper.Map<PaymentDto>(payment));
         }
 
@@ -69,13 +75,27 @@ public class ProcessPaymentCommandHandler(
                 CancelUrl = command.CancelUrl
             };
 
-            // 6. Process payment through gateway
-            logger.LogInformation(
-                "Calling payment gateway {Method} for payment {PaymentId}",
-                payment.Method,
-                payment.Id);
+            // 6. Build Retry Policy with Exponential Backoff
+            var retryPipeline = new ResiliencePipelineBuilder()
+                .AddRetry(new RetryStrategyOptions
+                {
+                    MaxRetryAttempts = MaxRetryAttempts,
+                    Delay = BaseDelay,
+                    BackoffType = DelayBackoffType.Exponential,
+                    OnRetry = args =>
+                    {
+                        LogRetryAttempt(logger, args.AttemptNumber, payment.Id, args.Outcome.Exception?.Message ?? "Unknown", args.RetryDelay.TotalSeconds);
+                        return ValueTask.CompletedTask;
+                    }
+                })
+                .Build();
 
-            var gatewayResult = await gateway.ProcessPaymentAsync(gatewayRequest, cancellationToken);
+            // 7. Process payment through gateway WITH RETRY
+            LogCallingGateway(logger, payment.Method, payment.Id);
+
+            var gatewayResult = await retryPipeline.ExecuteAsync(
+                async ct => await gateway.ProcessPaymentAsync(gatewayRequest, ct), 
+                cancellationToken);
 
             // 7. Handle result
             if (gatewayResult.IsSuccess)
@@ -145,4 +165,17 @@ public class ProcessPaymentCommandHandler(
             return ProcessPaymentResult.Failure(paymentDto, ex.Message);
         }
     }
+
+    // LoggerMessage source generators for high-performance logging
+    [LoggerMessage(Level = LogLevel.Information, Message = "Processing payment: {PaymentId}")]
+    private static partial void LogProcessingPayment(ILogger logger, Guid paymentId);
+
+    [LoggerMessage(Level = LogLevel.Warning, Message = "Payment {PaymentId} is already completed")]
+    private static partial void LogPaymentAlreadyCompleted(ILogger logger, Guid paymentId);
+
+    [LoggerMessage(Level = LogLevel.Warning, Message = "Retry attempt {AttemptNumber} for payment {PaymentId} due to: {ErrorMessage}. Waiting {WaitSeconds}s...")]
+    private static partial void LogRetryAttempt(ILogger logger, int attemptNumber, Guid paymentId, string errorMessage, double waitSeconds);
+
+    [LoggerMessage(Level = LogLevel.Information, Message = "Calling payment gateway {Method} for payment {PaymentId}")]
+    private static partial void LogCallingGateway(ILogger logger, PaymentMethod method, Guid paymentId);
 }

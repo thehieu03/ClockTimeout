@@ -147,7 +147,7 @@ public class CreateOrderCommandHandler(IUnitOfWork unitOfWork) : ICommandHandler
             await transaction.CommitAsync(cancellationToken);
             return orderId;
         }
-        catch (Exception e)
+        catch
         {
             await transaction.RollbackAsync(cancellationToken);
             throw;

@@ -77,7 +77,7 @@ public class MinIOCloundService : IMinlOCloundServices
             throw new InfrastructureException(ex.Message);
         }
 
-        return results;
+
     }
 
     private async Task EnsureBucketAsync(string bucketName, bool isPublicBuket, CancellationToken ct)

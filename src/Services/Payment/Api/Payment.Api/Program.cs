@@ -22,7 +22,8 @@ public partial class Program
         using (var scope = app.Services.CreateScope())
         {
             var dbContext=scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-            if (dbContext.Database.GetPendingMigrations().Any())
+            // Only run migrations for relational databases (not InMemory)
+            if (dbContext.Database.IsRelational() && dbContext.Database.GetPendingMigrations().Any())
             {
                 dbContext.Database.Migrate();
             }
